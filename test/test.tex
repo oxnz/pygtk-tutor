@@ -1,0 +1,45 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{xspace}
+\newcommand{\TUG}{\textsc{Tex Users Group}\xspace}
+\newcommand{\keyword}[1]{\textbf{#1}}
+%\usepackage[colorlinks=true,linkcolor=red]{hyperref}
+\begin{document}
+	\title{Example 3}
+	\author{My name}
+	\date{January 5, 2012}
+	\maketitle
+	\section{What's this?}
+	This	is    our
+	second document.
+
+	It contains two paragraphs. The first line of a paragraph will be
+	indented, but not when it follows a heading.
+	% Here's a comment
+	
+	Text can be \emph{emphasized}
+
+	Besides begin \textit{italic} words could be \textbf{bold},
+	\textsl{slanted} or typeset in \textsc{Small Caps}.
+
+	Such commands can be \textit{\textbf{nested}}.
+
+	\emph{See how \emph{emphasizing} looks when nested.}
+	\section{\textsf{\LaTeX\ resources on the internet}}
+	The best place for downloading LaTeX related software is CTAN.
+	Its address is \texttt{http://www.ctan.org}.
+	\section{\sffamily\LaTeX\ resources in the internet}
+	The best place for downloading LaTeX related software is CTAN.
+	Its address is \ttfamily http://www.ctan.org\rmfamily.
+	\section{text size}
+	\noindent\tiny We \scriptsize start \footnotesize \small small,
+	\normalsize get \large big \Large and \LARGE bigger, \huge huge
+	and \Huge gigantic!
+	\section{The \TUG}
+	The \TUG is an organization for people who are interested in \TeX
+	or \LaTeX.
+	\section{more universal command}
+	\keyword{Grouping} by curly braces limits the \keyword{scope} of
+	\keyword{declarations}.
+	\section{box}
+	\parbox{3cm}{\footnote{TUG is an acronym.} It means \TeX\ Users Group.}
+\end{document}

@@ -1,0 +1,311 @@
+\chapter{起步}
+首先我们介绍PyGTK的，我们先从最简单的程序可能。这个程序
+(base.py[例子/ base.py的])将创建一个200×200像素的窗口，
+有没有办法退出，除了被杀死的使用壳。
+You can run the above program using:
+python base.py
+
+如果base.py [的例子/ base.py]可执行文件，并且可以在你的PATH环境变量，
+它可以运行使用：
+base.py
+第一行将在这种情况下，调用Python运行base.py [例子/ base.py的]。
+第5-6行的帮助区分不同的PyGTK的版本，可以安装在您的系统上。
+这些行指定我们想要使用PyGTK的版本的2.0，涵盖了所有版本的PyGTK的
+主要2号。这防止了使用较早的程序从版本的PyGTK，如果它发生在您的
+系统上安装。 18-20行检查，如果\_\_name\_\_变量“\_\_main\_\_”，
+表示正在运行的程序，直接从Python，而不是被导入到运行Python解释器。
+在这种情况下，程序将创建一个新的Base类的实例，并保存的参考
+它在可变碱。然后，它调用的方法main（）开始GTK +的事件处理循环。
+
+
+类似于图2.1，“简单的PyGTK的窗口”应该在您的显示器上弹出一个窗口。	
+
+
+nux或UNIX shell程序被调用的程序base.py [的例子/ base.py]
+假设Python是你的PATH。这条线将所有的示例程序中的第一行。
+5-7行导入PyGTK的模块和初始化GTK +环境。 PyGTK的模块定义了蟒蛇
+将在程序中使用的GTK +功能的接口。对于那些熟悉GTK +的初始化
+包括调用gtk\_init（）函数。这几件事情对我们来说，如默认的视觉和彩色地图，
+默认的信号处理程序，并检查参数传递给应用程序的命令行，寻找一个或
+多个下列的：
+• --gtk-module
+• --g-fatal-warnings
+• --gtk-debug
+• --gtk-no-debug
+• --gdk-debug
+• --gdk-no-debug
+• --display
+• --sync
+• --name
+• --class
+
+它从参数列表中删除这些留下任何它不承认你的应用程序进行解析或忽略。
+这是一组接受所有GTK +应用程序的标准参数。
+第9-15行定义一个Python的名为Base的类，它定义了一个类的实例初始化方法
+\_\_init\_\_（）。
+在\_\_init\_\_（）函数创建一个顶层窗口（第11行），并指示显示GTK +（12号线）。 “
+在第11行的的参数gtk.WINDOW\_TOPLEVEL，指定我们要在创建gtk.Window
+窗口进行窗口管理器的装饰和布置。而不是创建一个0x0大小的窗口，一个窗口
+没有孩子的默认设置为200×200，所以你仍然可以操作它。
+第14-15行定义的main（）方法调用的PyGTK的主要（）函数，在调用GTK +主
+事件处理循环处理鼠标和键盘事件以及窗口事件。
+18-20行让程序自动启动，如果直接调用作为参数传递到python
+的解释，在这种情况下，程序的名称，在python变量\_\_name\_\_是字符串
+“\_\_main\_\_”和18-20行中的代码的将被执行。如果程序被加载到一个正在运行的Python解释器
+使用一个import语句，线条18-20将不会被执行。
+第19行创建了一个称为基的基类的实例。一个gtk.Window创建和显示的结果。
+第20行调用基类的main（）方法启动GTK +的事件处理循环。当控制
+达到这一点，GTK +睡觉等待X事件（如按钮或按键），超时或文件IO
+通知发生。然而，在我们这个简单的例子中，事件被忽略。	
+
+	\section{PyGTK的Hello, World}
+
+PyGTK的模块中定义的变量和函数命名为gtk的*。例如，
+helloworld.py [例子/ helloworld.py]程序所使用的：
+False
+gtk.mainquit()
+gtk.Window()
+gtk.Button()
+
+
+从PyGTK的模块。在以后的章节中，我将不指定GTK模块的前缀，但它会假设。 “
+示例程序将使用该模块的前缀。
+
+
+	\section{信号和回调理论}
+Note
+
+在GTK+2.0版本中，信号系统存GTK中移到了GLib中。我们不会深入探究GLib2.0
+信号系统的扩展。这对于PyGTK用户没有明显的差异。
+
+
+在深入探究helloworld.py之前[exmaples/helloworld.py]，我们将探讨一下信号与
+回调。GTK+是一个事件驱动工具包，这意味着它将在gtk.main()中sleep直到一个事件
+发生并且控制被传递到适当的函数。
+
+
+这种控制传递使用信号来做。(这些信号与UNIX系统中的信号是不相同的，并且不是
+使用它们实现的，虽然属于几乎是相同的。) 当一个事件发生时，例如鼠标按钮点击，
+被按下的widget将发出适当的信号。这就是GTK+如何处理它的大部分工作。有些信号是
+所有widget都继承了的，例如"destroy"，也有widget特定的信号，例如toggle按钮上
+的toggled。
+
+
+为了使一个按钮执行一个动作，我们设置信号处理函数并调用适当的函数。这是如下
+使用GtkWidget(from the GObject class)方法:
+handler\_id = object.connect(name, func, func\_data)
+其中object是用于发出信号的GtkWidget的实例，第一个参数name是一个包含要捕捉的
+信号名称的字符串。第二个参数，func，是你想在信号捕捉之后被调用的函数，第三个
+，func\_data,是你想传递给这个函数的数据。这个方法返回一个可以被用于disconnect
+或block的handler\_id.
+
+\section{Events}
+除了上述的信号机制中，有一组X事件机制的事件的真实反映。
+回调也可以连接到这些事件。这些事件包括：
+%event
+%button_press_event
+%button_release_event
+%scroll_event
+%motion_notify_event
+%delete_event
+%destroy_event
+%expose_event
+%key_press_event
+%key_release_event
+%enter_notify_event
+%leave_notify_event
+%configure_event
+%focus_in_event
+%focus_out_event
+%map_event
+%unmap_event
+%property_notify_event
+%selection_clear_event
+%selection_request_event
+%selection_notify_event
+%proximity_in_event
+%proximity_out_event
+%visibility_notify_event
+%client_event
+%no_expose_event
+%window_state_event
+
+
+为了连接一个回调函数的使用方法连接（这些事件），如上所述，
+使用一个上述事件名称作为name参数。事件的回调函数（或方法）有一个轻微
+不同形式的信号：
+
+%def callback_func(widget, event, callback_data ):
+%def callback_meth(self, widget, event, callback_data ):
+
+GdkEvent是一个Python的对象类型，其类型属性将显示上述事件已经发生。 “
+将取决于事件的类型的事件的其他属性。可能的值的类型是：
+
+NOTHING
+DELETE
+DESTROY
+EXPOSE
+%MOTION_NOTIFY
+%BUTTON_PRESS
+%_2BUTTON_PRESS
+%_3BUTTON_PRESS
+%BUTTON_RELEASE
+%KEY_PRESS
+%KEY_RELEASE
+%ENTER_NOTIFY
+%LEAVE_NOTIFY
+%FOCUS_CHANGE
+%CONFIGURE
+%MAP
+%UNMAP
+%PROPERTY_NOTIFY
+%SELECTION_CLEAR
+%SELECTION_REQUEST
+%SELECTION_NOTIFY
+%PROXIMITY_IN
+%PROXIMITY_OUT
+%DRAG_ENTER
+%DRAG_LEAVE
+%DRAG_MOTION
+%DRAG_STATUS
+%DROP_START
+%DROP_FINISHED
+%CLIENT_EVENT
+%VISIBILITY_NOTIFY
+%NO_EXPOSE
+%SCROLL
+%WINDOW_STATE
+SETTING
+
+这些值将前面的事件类型gtk.gdk访问。例如gtk.gdk.DRAG\_ENTER。
+因此，连接一个回调函数，我们将使用类似的这些事件之一：
+
+%button.connect("button_press_event", button_press_callback)
+
+这假定按钮是一个GtkButton上的窗口小部件。现在，当鼠标在按钮和鼠标按钮
+按下时，该函数button\_press\_callback将被调用。此功能可以被定义为：
+
+%def button_press_callback(widget, event, data ):
+
+从这个函数的返回值表示该事件是否应进一步传播的GTK +事件
+处理机制。返回True表示该事件已经被处理了，并且它不应该传播
+进一步。返回FALSE继续正常的事件处理。请参阅第20章，高级事件和信号处理
+这个传播过程的详细信息。
+
+
+GDK的选择和拖放和拖放的API也发出了一些事件中所反映的GTK +的信号。看
+第22.3.2节，“在源窗口小部件”和第22.3.4的信号，“信号目标的Widget”
+这些信号的回调函数的签名：
+
+%selection_received
+%selection_get
+%drag_begin_event
+%drag_end_event
+%drag_data_delete
+%drag_motion
+%drag_drop
+%drag_data_get
+%drag_data_received
+
+	\section{一步一步探究Hello World}
+现在，我们知道这背后的理论，让我们澄清走过的例子helloworld.py考试 - 
+普莱斯/ helloworld.py程序。
+
+
+第9-76行定义的HelloWorld类，它包含所有的回调对象的方法和对象的实例
+初始化的方法。让我们来看看回调方法。
+
+
+第13-14行定义为hello（）回调方法，该按钮时，将被称为“点击”。当调用
+方法，打印“你好世界”到控制台。我们忽略的对象实例，窗口小部件并在此数据参数
+例如，但多数回调使用它们。数据定义PyGTK的，因为将使用默认值“无”
+通过数据值，如果它不包括在connect（）调用，这将引发一个错误，因为回调预期
+三个参数，可能会收到只有两个。定义为“无”的默认值，允许两个或三个参数没有错误回调函数被调用。在这种情况下的数据参数可以被留下满分以来hello（）方法
+一直被称为只有两个参数（从来没有所谓的用户数据）。下面的例子将使用数据
+参数告诉我们哪个按钮被按下。
+
+def hello(self, widget, data=None):
+print "Hello World"
+
+下一个回调（16-26）有点特殊。窗口管理器的“delete\_event”发生时，发送此事件
+到应用程序。我们有一个选择，在这里做什么关于这些事件的。我们可以忽略它们，使某种
+响应，或者干脆退出应用程序。
+
+
+你这个回调函数返回的值让GTK +知道采取什么样的行动。通过返回TRUE，让它知道我们
+不想发出“destroy”信号，保持我们的应用程序运行。返回FALSE，我们要求
+“消灭”的发出，我们将依次调用“destroy”信号处理程序。请注意评论已被移除
+清晰度。
+
+
+def delete\_event(widget, event, data=None):
+print "delete event occurred"
+return False
+
+的destroy（）回调方法（行28-30）导致程序退出调用gtk.main\_quit（）的。
+函数告诉GTK +，它是退出从gtk.main（）时，控制返回到它。
+
+第52行创建一个新按钮，节省了提到它在self.button。该按钮将标签为“Hello
+世界“时显示。	
+self.button = gtk.Button("Hello World")
+
+在第57行，我们的信号处理程序附加到按钮时，它会发出“clicked”信号，我们的hello（）回调方法
+被调用。如果我们没有为hello（），所以我们只是传递的数据没有任何数据。显然，“clicked”信号
+我们与我们的鼠标指针单击该按钮时发出。用户数据参数值无不是必需的。
+可以除去。然后，回调将被称为少了一个参数。
+
+self.button.connect("clicked", self.hello, None)
+
+我们也将使用此按钮来退出程序。第62行说明了如何“消灭”的信号可能来自
+无论是窗口管理器，或从我们的节目。当按钮被“点击”，和上面一样，它调用hello（）
+回调，然后再下面的顺序设置了。你可能有你需要的尽可能多的回调，
+和所有将要执行的顺序连接。
+既然我们要使用的GtkWidget的destroy（）方法接受一个参数（窗口小部件被破坏
+ - 在这种情况下，窗口中），我们使用的connect\_object（）方法，并把它传递到窗口的参考。 “
+ connect\_object（）方法安排通过的第一个回调参数，而不是按钮的窗口。
+ 的gtk.Widget destroy（）方法被调用时，它会导致从窗口发出“destroy”信号
+ 这将反过来造成的的HelloWorld破坏（）方法被调用来结束程序。
+
+% self.button.connect_object("clicked", gtk.Widget.destroy, self.window)
+
+
+ 第65行是一个包装的呼叫，将要说明在后面深度在第4章中，包装小部件。但它是相当容易
+ 理解。它只是告诉GTK +是被放置在窗口，它会显示该按钮。需要注意的是
+ GTK +容器只能包含一个部件。有后述的其他部件，而设计的布局
+ 多个部件以不同的方式。
+
+ self.window.add(self.button)
+
+ 现在，我们拥有一切的方式，我们希望它是。与所有的信号处理程序中，按钮放置
+ 在窗口中，它应该是，我们要求GTK +（66行和第69行）“显示在屏幕上的小部件。该窗口
+ 窗口小部件，最后使整个窗口弹出一次，而不是看到窗口弹出，然后
+ 它里面的按钮形成。虽然这样一个简单的例子，你永远也不会注意到。	
+
+ self.button.show（）
+ self.window.show（）
+ 第73-75行定义的main（）方法，该方法调用的gtk.main（）函数
+def main(self):
+	gtk.main（）
+
+	第80-82行让程序自动运行，如果直接调用或参数的Python解释器。线
+	81创建的HelloWorld类的一个实例，并保存在hello变量的参考。行82调用
+	HelloWorld类的ma​​in（）方法来启动GTK +的事件处理循环。
+
+%	if __name__ == "__main__":
+	hello = HelloWorld()
+	hello.main()
+
+
+现在，当我们点击鼠标左键在GTK +按钮，窗口小部件会发出一个“clicked”信号。为了让大家使用
+这些信息，我们的程序设置了一个信号处理程序来捕获的信号，调度的功能，我们的选择。
+在我们的例子中，我们创建按钮时，“点击”，hello（）方法被称为“无参数，并
+然后该信号的下一个处理程序被调用。下一个处理程序调用部件的destroy（）函数的窗口
+作为它的参数，从而导致窗口发出“destroy”信号，它被捕获，并调用我们的HelloWorld
+destroy（）方法
+
+
+事件过程中使用的窗口管理器去关闭窗口，这将导致的“delete\_event”
+排放。这将要求我们的“delete\_event”处理。如果我们返回TRUE，窗口将保持原样，并没有什么
+会发生什么。返回FALSE，将导致GTK +发出“destroy”信号导致的HelloWorld“消灭”
+回调被调用，退出GTK。	
+

@@ -1,0 +1,172 @@
+\chapter{打包小部件}
+当创建一个应用程序到时候，你将会在窗口中放置多个小部件。我们第一个helloworld例子
+仅仅使用了一个小部件，所以我们可以简单的使用gtk.Container.add()方法来‘pack’这个
+小部件到窗口中。但是当想要在一个窗口中放置多于一个的小部件的时候，你又如何控制
+小部件的安置呢？这就是packing的来源。
+\section{Packing Boxes 的理论}
+多数组装是通过创建盒。这些看不见的小工具容器，我们可以收拾我们的小部件到
+有两种形式，一种横向盒和一个垂直的盒子。当包装部件到一个水平的盒子，对象是
+水平插入由左到右或从右到左，具体取决于所使用的调用。在一个垂直的盒子，组装构件，
+从顶部向底部或反之亦然。您可以使用任何其他框的里面或旁边的箱子组合创造
+所需的效果。
+
+
+要创建一个新的横向盒，我们可以通过调用gtk.HBox()，对于纵向盒,gtk.VBox().“
+pack_start()和pack_end()方法用于将这些容器中的对象。 pack_start()
+方法将开始在顶部，其工作方式，在一个vbox，并装在一个hbox左到右.pack_end()
+方法将做相反的，包装在一个vbox从底部到顶部，然后从右到左横向盒。使用这些方法
+允许右对齐，左对齐我们的小部件，并可以混合以任何方式，以达到预期的效果。我们将
+在我们的例子中，使用pack_start()。的对象可以是另一个容器或构件.事实上,许多构件
+本身就是容器，包括按钮，但我们通常只使用一个按钮，一个标签内.
+
+
+通过使用这些调用,GTK知道在哪里,你要放置你的部件,所以它可以做自动调整大小和
+其他漂亮的的东西。也有一些选择，如何包装你的构件。正如你可以想像，这种方法
+给我们带来了相当多的灵活性时，放置和创建构件。
+\section{Details of Boxes}
+由于这种灵活性,在包装盒中的GTK第一印象可能是混乱的。有很多的选项，这是不
+显而易见的，它们是如何组合在一起的。然而，归根结底，有五个不同的风格。图4.1
+“包装：五变奏曲”，说明了结果，的运行的程序packbox.py的[例子/ packbox.py的]与
+参数1：	
+
+Figure 4.1. Packing: Five Variations
+
+每一行包含一个水平盒子（盒子）与几个按钮。调用包是包调用的简写
+每到横向盒的按钮。被打包到每个按钮的横向盒以同样的方式（即，相同的参数
+pack_start（）方法）。
+这是pack_start（）方法的一个例子。
+
+box.pack_start(child, expand, fill, padding)
+
+盒包装的对象中，您的第一个参数是孩子被包装物。对象将
+所有的按钮了，所以我们会被包装成箱的按钮。
+扩展参数pack_start（）和pack_end（）控制的部件是否在箱
+填写包装盒中所有的额外空间，这样的框扩展以填充该区域配发予（真），或包装盒收缩
+正好契合了小部件（假）。设置为False的扩展将允许你做你的左，右的理由
+小部件。否则，他们将扩大到符合入禁区，可以达到同样的效果，通过只使用一个
+pack_start（）或pack_end（）。
+
+填充的包装方法控制参数是否额外的空间分配给对象本身（TRUE），
+或微胖这些对象周围的框（假）。它只有一个效果，如果扩展参数也是真实的。
+Python允许的方法或函数定义的默认参数值和参数关键字。始终
+本教程中我将展示的功能定义和方法，违约和关键字以粗体显示（如适用）。为
+例如pack_start（）方法被定义为：
+
+box.pack_start(child, expand=True, fill=True, padding=0)
+box.pack_end(child, expand=True, fill=True, padding=0)
+孩子，扩展，填充和填充的关键字。扩展，填充和填充参数
+默认显示。子参数必须被指定。
+当创建一个新的框，该函数看起来像这样：
+hbox = gtk.HBox(homogeneous=False, spacing=0)
+vbox = gtk.VBox(homogeneous=False, spacing=0)
+
+参数homogeneous 到gtk.HBox（）和控制包装盒中的每个对象是否有gtk.VBox（）
+相同的大小（即，相同的宽度在一个hbox，或以相同高度在一个vbox）。如果它被设置，包例程功能
+基本上，如果展开争论始终是打开的。
+间距（框创建时设置）和padding（设置元素的时候装）之间的区别是什么？
+间距之间添加对象，和填充被加到任一侧上的一个对象。图4.2中，“包装与间距
+和“填充”说明了差异;传递一个参数2 packbox.py [例子/ packbox.py的]：
+\section{Packing Demonstration Program}
+[examples/packbox.py]的代码，用于创建上面的图片。它的评论相当严重，所以我希望你
+不会有任何问题。运行它自己和它一起玩。
+
+开始一个简短的参观packbox.py [实例/ packbox.py]代码定义一个辅助函数用线14-50
+make_box（），创建一个水平的盒子和填充按钮，根据指定的参数。一
+参考水平中被返回。	
+
+
+line 52-241定义PackBox1的类的初始化方法的__init__（），创建一个窗口和一个孩子的垂直
+框，填充不同的部件安排取决于该参数传递给它。如果1被传递，
+212-214线创建一个窗口，显示独特的包装时，可以使用不同的安排
+均匀，扩展和填充参数。如果获得通过，2线140-182创建一个窗口，显示各种
+组合充满间距和边距。最后，如​​果通过一个3线188-214创建一个视窗显示该
+使用左对齐按钮和pack_end（）方法来右对齐的标签的的pack_start（）方法。线
+215-235垂直的盒子包装成一个按钮，创建一个水平的盒子。按钮“点击”的信号是
+连接到的PyGTK的main_quit（）函数来终止程序。
+行250-252检查命令行参数，并退出程序使用sys.exit（）函数，如果没有
+只有一个参数。线253创建一个PackBox1的的实例。 254行调用main（）函数开始的GTK
+事件处理循环。
+在这个示例程序中，不会保存在该对象的实例引用的各种部件（除窗口）
+，因为他们不需要的属性。
+
+\section{Packing Using Tables}
+让我们来看看包装的另一种方式 - 表。这些可以在某些情况下是非常有用的。
+使用表格中，我们将创建一个网格，我们可以把英寸的部件可能需要尽可能多的空间，因为我们指定的窗口小部件。
+看的第一件事，当然，是gtk.Table（）函数：
+table = gtk.Table(rows=1, columns=1, homogeneous=False)
+
+均匀的说法有做表的盒子的大小。如果是真正的均匀，表
+框的大小被调整到表中的最大的窗口小部件的大小。如果是假均匀，大小的表箱
+取决于由最高的窗口小部件在相同的行中，最宽的窗口小部件在其列。
+这些行和列的布局从0到n，其中n是在调用中指定的数字对gtk.Table（）。所以，如果
+你指定行= 2 = 2列，布局看起来像这样：
+
+0	1	2
+0+----------+----------+
+|
+|
+|
+1+----------+----------+
+|
+|
+|
+2+----------+----------+
+
+
+请注意，在左上角开始的坐标系统。要放在一个盒子里放置一个小部件，请使用以下
+方法：
+table.attach(child, left_attach, right_attach, top_attach, bottom_attach, xoptions=EXPAND|FILL, yoptions=EXPAND|FILL, xpadding=0, ypadding=0)
+的表实例是您创建的表与gtk.Table（）。 （“子”）的第一个参数是你希望的部件
+放置在表中。
+left_attach，right_attach，top_attach和bottom_attach参数指定放置
+小部件，有多少盒使用。如果你想有一个按钮在右下角我们的2x2表的表项，并希望它
+填补了这一项目，left_attach = 1，right_attach = 2，top_attach = 1，bottom_attach
+= 2。
+现在，如果你想要一个小部件，占据整个我们的2x2表的最上面一行，你会使用left_attach = 0，
+right_attach top_attach = 0，bottom_attach = 1 = 2，。
+的xoptions和yoptions是用来指定包装的选项，并可能是按位进行逻辑或运算在一起以允许
+多种选择。
+这些选项包括：
+FILL
+SHRINK
+EXPAND
+If the table cell is larger than the widget, and FILL is specified, the widget will expand to
+use all the room available in the cell.
+If the table widget was allocated less space then was requested (usually by the user resizing
+the window), then the widgets would normally just be pushed off the bottom of the window
+and disappear. If SHRINK is specified, the widgets will shrink with the table.
+This will cause the table cell to expand to use up any remaining space allocated to the table.
+
+
+填充就像在盒子里，制定一个明确的以像素为单位指定窗口小部件周围地区。
+我们也有set_row_spacing（）和set_col_spacing（）方法。这些附加的行之间的间距
+指定的行或列。
+
+table.set_row_spacing(row, spacing)
+and
+table.set_col_spacing(column, spacing)
+
+请注意，为列，空间进入到右侧的列，和行，空间以下的行。
+您还可以设置一致的所有行和/或列间距：
+table.set_row_spacings(spacing)
+and
+talbe.set_col_spacings(spacing)
+
+请注意，这些调用中，最后一排和最后一列没有得到任何间距。
+\section{Table Packing Example}
+示例程序table.py [的例子/ table.py]使一个窗口，一个2x2的表中有三个按钮。前两个
+按钮将被放置在上排。第三，退出按钮，是摆在下面一行，跨越两列。
+图4.4中，“包装”说明了出现的窗口中，使用表：	
+Here's the source code:
+表类中定义线9-78。第12-13行定义的回调（）方法被调用时的两个
+按钮“点击”。回调只是打印一条消息到控制台，表示哪个按钮被按下使用
+传递的字符串数据。
+第16-18行定义delete_event（）方法被调用时，窗口定为删除
+窗口管理器。
+第20-78行定义表的实例初始化方法__init__（）方法。它创建了一个窗口（22行），设置
+窗口标题（第25行），连接delete_event（）回调的“delete_event”信号（第29行），并设置
+边框宽度（第32行）。甲gtk.Table在第35行中被创建，并添加到第38行中的窗口。
+上部的两个按钮被创建（第41行和第55行），他们的“点击”的信号被连接到的回调（）方法
+（第45行和第59行），并连接到该表的第一行中（第49行和第61行）。第66-72行创建了“Quit”按钮，
+“clicked”信号连接到的main_quit（）函数，将其连接到跨越整个第二行的表。	
+

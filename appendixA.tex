@@ -1,0 +1,161 @@
+\chapter{GTK Signals}
+PyGTK是一个面向对象的外集件组，它有一个继承层次结构。这种继承机制适用于
+信号。因此，您应该参阅本节中列出的信号时使用的部件层次树。
+	\section{GtkObject}
+	destroy(object, data)
+	\section{GtkWidget}
+	show(GtkWidget, data)
+	hide(widget, data)
+	map(widget, data)
+	unmap(widget, data)
+	realize(widget, data)
+	unrealize(widget, data)
+	draw(widget, area, data)
+	draw-focus(widget, data)
+	draw-default(widget, data)
+	size-request(widget, requisition, data)
+	size-allocate(widget, allocation, data)
+	state-changed(widget, state, data)
+	parent-set(widget, object, data)
+	style-set(widget, style, data)
+	add-accelerator(widget, accel_signal_id, accel_group, accel_key, accel_mods,
+	accel_flags, data)
+	remove-accelerator(widget, accel_group, accel_key, accel_mods, data)
+	bool = event(widget, event, data)
+	bool = button-press-event(widget, event, data)
+	bool = button-release-event(widget, event, data)
+	bool = motion-notify-event(widget, event, data)
+	bool = delete-event(widget, event, data)
+	bool = destroy-event(widget, event, data)
+	bool = expose-event(widget, event, data)
+	bool = key-press-event(widget, event, data)
+	bool = key-release-event(widget, event, data)
+	bool = enter-notify-event(widget, event, data)
+	bool = leave-notify-event(widget, event, data)
+	bool = configure-event(widget, event, data)
+	bool = focus-in-event(widget, event, data)
+	bool = focus-out-event(widget, event, data)
+	bool = map-event(widget, event, data)
+	bool = unmap-event(widget, event, data)
+	bool = property-notify-event(widget, event, data)
+	bool = selection-clear-event(widget, event, data)
+	bool = selection-request-event(widget, event, data)
+	bool = selection-notify-event(widget, event, data)
+	selection-get(widget, selection_data, info, time, data)
+	selection-received(widget, selection_data, time, data)
+	bool = proximity-in-event(widget, event, data)
+	bool = proximity-out-event(widget, event, data)
+	drag-begin(widget, context, data)
+	drag-end(widget, context, data)
+	drag-data-delete(widget, context, data)
+	drag-leave(widget, context, time, data)
+	bool = drag-motion(widget, context, x, y, time, data)
+	bool = drag-drop(widget, context, x, y, time, data)
+	drag-data-get(widget, context, selection_data, info, time, data)
+	drag-data-received(widget, context, info, time, selection_data,
+	info, time, data)
+	bool = client-event(widget, event, data)
+	bool = no-expose-event(widget, event, data)
+	bool = visibility-notify-event(widget, event, data)
+	debug-msg(widget, string, data)
+
+	\section{GtkData}
+	disconnect(data_obj, data)
+
+	\section{GtkContainer}
+	add(container, widget, data)
+	remove(container, widget, data)
+	check-resize(container, data)
+	direction = focus(container, direction, data)
+	set-focus-child(container, widget, data)
+
+	\section{GtkCalendar}
+	month-changed(calendar, data)
+	day-selected(calendar, data)
+	day-selected-double-click(calendar, data)
+	prev-month(calendar, data)
+	next-month(calendar, data)
+	prev-year(calendar, data)
+	next-year(calendar, data)
+
+	\section{GtkEditable}
+	changed(editable, data)
+	insert-text(editable, new_text, text_length, position, data)
+	delete-text(editable, start_pos, end_pos, data)
+	activate(editable, data)
+	set-editable(editable, is_editable, data)
+	move-cursor(editable, x, y, data)
+	move-word(editable, num_words, data)
+	move-page(editable, x, y, data)
+	move-to-row(editable, row, data)
+	move-to-column(editable, column, data)
+	kill-char(editable, direction, data)
+	kill-word(editable, drirection, data)
+	kill-line(editable, direction, data)
+	cut-clipboard(editable, data)
+	copy-clipboard(editable, data)
+	paste-clipboard(editable, data)
+
+	\section{GtkNotebook}
+	switch-page(noteboook, page, page_num, data)
+
+	\section{GtkList}
+	selection-changed(list, data)
+	select-child(list, widget, data)
+	unselect-child(list, widget, data)
+
+	\section{GtkMenuShell}
+	deactivate(menu_shell, data)
+	selection-done(menu_shell, data)
+	move-current(menu_shell, direction, data)
+	activate-current(menu_shell, force_hide, data)
+	cancel(menu_shell, data)
+
+	\section{GtkToolbar}
+	orientation-changed(toolbar, orientation, data)
+	style-changed(toolbar, toolbar_style, data)
+
+	\section{GtkButton}
+	pressed(button, data)
+	released(button, data)
+	clicked(button, data)
+	enter(button, data)
+	leave(button, data)
+
+	\section{GtkItem}
+	select(item, data)
+	deselect(item, data)
+	toggle(item, data)
+
+	\section{GtkWindow}
+	set-focus(window, widget, data)
+
+	\section{GtkHandleBox}
+	child-attached(handle_box, widget, data)
+	child-detached(handle_box, widget, data)
+
+	\section{GtkToggleButton}
+	toggled(toggle_button, data)
+
+	\section{GtkMenuItem}
+	activate(menu_item, data)
+	activate-item(menu_item, data)
+
+	\section{GtkCheckMenuItem}
+	toggled(check_menu_item, data)
+
+	\section{GtkInputDialog}
+	enable-device(input_dialog, deviceid, data)
+	disable-device(input_dialog, deviceid, data)
+
+	\section{GtkColorSelection}
+	color-changed(color_selection, data)
+
+	\section{GtkStatusBar}
+	text-pushed(statusbar, context_id, text, data)
+	text-popped(statusbar, context_id, text, data)
+	\section{GtkCurve}
+	curve-type-changed(curve, data)
+	\section{GtkAdjustment}
+	changed(adjustment, data)
+	value-changed(adjustment, data)

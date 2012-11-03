@@ -1,0 +1,44 @@
+\chapter{继续}
+\begin{lstlisting}[language=C]
+	int main(int argc, char* argv[]) {
+		printf("Hello, world!\n");
+		return 0;
+	}
+\end{lstlisting}
+\begin{lstlisting}[language=Python]
+	int main(int argc, char* argv[]) {
+		return 0;
+	}
+\end{lstlisting}
+	\section{More on Signal Handlers}
+让我们看一下connect()调用.
+object.connect(name, func, func\_data)
+一个connect()调用返回一个标识回调函数的证书。如上所说，你可能有
+每个信号和每个对象，因为你需要尽可能多的回调，都将依次执行的顺序，他们是
+连接。
+这个标签允许你通过从列表中删除此回调：
+object.disconnect(id)
+因此，通过在标签返回的信号连接方法之一，你可以断开信号处理程序。
+您也可以使用signal\_handler\_block() 和 signal\_handler\_unblock函数对暂时禁用
+信号处理函数.
+%object.signal_handler_block(handler_id)
+%object.signal_handler_unblock(handler_id)
+	\section{Hello World的升级}
+运行helloworld2.py examples/helloworld2.py产生在图3.1所示的窗口，“升级你好
+世界例“。
+Figure 3.1. Upgraded Hello World Example
+有没有简单的方法来退出程序，你会发现这个时候，你必须使用你的窗口管理器或命令
+排队要杀死它。的读者将是一个很好的锻炼插入第三个“退出”按钮，退出程序。您
+也不妨玩的选项pack\_start（），而阅读下一节。尝试调整窗口大小，
+并观察其行为。
+上的第一个helloworld程序代码的不同之处是在一个简短的评论。
+正如上面有没有“破坏”事件处理程序，在升级后的helloworld的。
+第13-14行定义一个回调方法，该方法是类似的hello（）回调中的第一个helloworld。不同的
+是的回调打印一条消息，包括数据传递的。
+第27行设置一个标题字符串上使用的窗口的标题栏（参见图3.1 Hello World例子，“升级”）。
+第39行创建一个水平的的对话框（gtk.HBox）持有的两个按钮是建立在第45行和60行。第42行增加
+水平盒子的窗口容器。
+49和64行的回调（）方法来连接按钮的“clicked”信号。每个按钮都设置了不同的
+字符串将被传递给回调函数（）方法被调用时。
+第53和66行包的水平框中的按钮。第57和70行要求GTK显示按钮。
+线71-72问GTK的包装盒和窗口分别显示.

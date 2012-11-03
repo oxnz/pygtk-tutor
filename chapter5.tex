@@ -1,0 +1,305 @@
+\chapter{Widget Overview}
+使用PyGTK的一个小部件的一般步骤是：
+•调用GTK *  - 各种功能，以创建一个新的部件之一。这些都是本节详细介绍。
+•将所有的信号和事件，我们希望使用相应的处理程序。
+•设置小部件的属性。
+•包小部件放入容器中，使用适当的调用，如gtk.Container.add（）或gtk.Box.pack_start（）。
+gtk.Widget.show（）的部件。
+show（）方法可以让GTK知道我们是做小部件的属性设置，它已准备好要显示的。您可以
+您也可以使用gtk.Widget.hide（），使其再次消失。显示部件的顺序并不重要，
+但我建议最后显示窗口，因此整个窗口弹出一次，而不是看到单独的部件
+在屏幕上，因为他们正在形成。孩子们的widget（窗口是一个小部件）将不显示
+直到窗口本身是使用show（）方法。
+
+\section{Widget 层次}
+供您参考，这里是用来实现部件的类层次结构树。 （不赞成使用的部件和辅助
+类被省略了。）	
+gobject.GObject
+|
++gtk.Object
+| +gtk.Widget
+| | +gtk.Misc
+| | | +gtk.Label
+| | | | ‘gtk.AccelLabel
+| | | +gtk.Arrow
+| | | ‘gtk.Image
+| | +gtk.Container
+| | | +gtk.Bin
+| | | | +gtk.Alignment
+| | | | +gtk.Frame
+| | | | | ‘gtk.AspectFrame
+| | | | +gtk.Button
+| | | | | +gtk.ToggleButton
+| | | | | | ‘gtk.CheckButton
+| | | | | | ‘gtk.RadioButton
+| | | | | +gtk.ColorButton
+| | | | | +gtk.FontButton
+| | | | | ‘gtk.OptionMenu
+| | | | +gtk.Item
+| | | | | +gtk.MenuItem
+| | | | | +gtk.CheckMenuItem
+| | | | | | ‘gtk.RadioMenuItem
+| | | | | +gtk.ImageMenuItem
+| | | | | +gtk.SeparatorMenuItem
+| | | | ‘gtk.TearoffMenuItem
+| | | +gtk.Window
+| | | | +gtk.Dialog
+| | | | | +gtk.ColorSelectionDialog
+| | | | | +gtk.FileChooserDialog
+| | | | | +gtk.FileSelection
+| | | | | +gtk.FontSelectionDialog
+| | | | | +gtk.InputDialog
+| | | | | ‘gtk.MessageDialog
+| | | | ‘gtk.Plug
+| | | +gtk.ComboBox
+| | | | ‘gtk.ComboBoxEntry
+| | | +gtk.EventBox
+| | | +gtk.Expander
+| | | +gtk.HandleBox
+| | | +gtk.ToolItem
+| | | | +gtk.ToolButton
+| | | | | +gtk.ToggleToolButton
+| | | | | | ‘gtk.RadioToolButton
+| | | | ‘gtk.SeparatorTooItem
+| | | +gtk.ScrolledWindow
+| | | ‘gtk.Viewport
+| | +gtk.Box
+| | | +gtk.ButtonBox
+| | | | +gtk.HButtonBox
+| | | | ‘gtk.VButtonBox
+| | | +gtk.VBox
+| | | | +gtk.ColorSelection
+| | | | +gtk.FontSelection
+| | | | ‘gtk.GammaCurve
+| | | ‘gtk.HBox
+| | | +gtk.Combo
+| | | ‘gtk.Statusbar
+| | +gtk.Fixed
+| | +gtk.Paned
+| | | +gtk.HPaned
+| | | ‘gtk.VPaned
+| | +gtk.Layout
+| | +gtk.MenuShell
+| | | +gtk.MenuBar
+| | | ‘gtk.Menu
+| | +gtk.Notebook
+| | +gtk.Socket
+| | +gtk.Table
+| | +gtk.TextView
+| | +gtk.Toolbar
+| | ‘gtk.TreeView
+| +gtk.Calendar
+| +gtk.DrawingArea
+| | ‘gtk.Curve
+| +gtk.Entry
+| | ‘gtk.SpinButton
+| +gtk.Ruler
+| | +gtk.HRuler
+
+| | | ‘gtk.VRuler
+| | +gtk.Range
+| | | +gtk.Scale
+| | | | +gtk.HScale
+| | | | ‘gtk.VScale
+| | | ‘gtk.Scrollbar
+| | | +gtk.HScrollbar
+| | | ‘gtk.VScrollbar
+| | +gtk.Separator
+| | | +gtk.HSeparator
+| | | ‘gtk.VSeparator
+| | +gtk.Invisible
+| | +gtk.Progress
+| | | ‘gtk.ProgressBar
+| +gtk.Adjustment
+| +gtk.CellRenderer
+| | +gtk.CellRendererPixbuf
+| | +gtk.CellRendererText
+| | +gtk.CellRendererToggle
+| +gtk.FileFilter
+| +gtk.ItemFactory
+| +gtk.Tooltips
+| ‘gtk.TreeViewColumn
++gtk.Action
+| +gtk.ToggleAction
+| | ‘gtk.RadioAction
++gtk.ActionGroup
++gtk.EntryCompletion
++gtk.IconFactory
++gtk.IconTheme
++gtk.IMContext
+| +gtk.IMContextSimple
+| ‘gtk.IMMulticontext
++gtk.ListStore
++gtk.RcStyle
++gtk.Settings
++gtk.SizeGroup
++gtk.Style
++gtk.TextBuffer
++gtk.TextChildAnchor
++gtk.TextMark
++gtk.TextTag
++gtk.TextTagTable
++gtk.TreeModelFilter
++gtk.TreeModelSort
++gtk.TreeSelection
++gtk.TreeStore
++gtk.UIManager
++gtk.WindowGroup
++gtk.gdk.DragContext
++gtk.gdk.Screen
++gtk.gdk.Pixbuf
++gtk.gdk.Drawable
+| +gtk.gdk.Pixmap
+| | | ‘gtk.VRuler
+| | +gtk.Range
+| | | +gtk.Scale
+| | | | +gtk.HScale
+| | | | ‘gtk.VScale
+| | | ‘gtk.Scrollbar
+| | | +gtk.HScrollbar
+| | | ‘gtk.VScrollbar
+| | +gtk.Separator
+| | | +gtk.HSeparator
+| | | ‘gtk.VSeparator
+| | +gtk.Invisible
+| | +gtk.Progress
+| | | ‘gtk.ProgressBar
+| +gtk.Adjustment
+| +gtk.CellRenderer
+| | +gtk.CellRendererPixbuf
+| | +gtk.CellRendererText
+| | +gtk.CellRendererToggle
+| +gtk.FileFilter
+| +gtk.ItemFactory
+| +gtk.Tooltips
+| ‘gtk.TreeViewColumn
++gtk.Action
+| +gtk.ToggleAction
+| | ‘gtk.RadioAction
++gtk.ActionGroup
++gtk.EntryCompletion
++gtk.IconFactory
++gtk.IconTheme
++gtk.IMContext
+| +gtk.IMContextSimple
+| ‘gtk.IMMulticontext
++gtk.ListStore
++gtk.RcStyle
++gtk.Settings
++gtk.SizeGroup
++gtk.Style
++gtk.TextBuffer
++gtk.TextChildAnchor
++gtk.TextMark
++gtk.TextTag
++gtk.TextTagTable
++gtk.TreeModelFilter
++gtk.TreeModelSort
++gtk.TreeSelection
++gtk.TreeStore
++gtk.UIManager
++gtk.WindowGroup
++gtk.gdk.DragContext
++gtk.gdk.Screen
++gtk.gdk.Pixbuf
++gtk.gdk.Drawable
+| +gtk.gdk.Pixmap
+| | | ‘gtk.VRuler
+| | +gtk.Range
+| | | +gtk.Scale
+| | | | +gtk.HScale
+| | | | ‘gtk.VScale
+| | | ‘gtk.Scrollbar
+| | | +gtk.HScrollbar
+| | | ‘gtk.VScrollbar
+| | +gtk.Separator
+| | | +gtk.HSeparator
+| | | ‘gtk.VSeparator
+| | +gtk.Invisible
+| | +gtk.Progress
+| | | ‘gtk.ProgressBar
+| +gtk.Adjustment
+| +gtk.CellRenderer
+| | +gtk.CellRendererPixbuf
+| | +gtk.CellRendererText
+| | +gtk.CellRendererToggle
+| +gtk.FileFilter
+| +gtk.ItemFactory
+| +gtk.Tooltips
+| ‘gtk.TreeViewColumn
++gtk.Action
+| +gtk.ToggleAction
+| | ‘gtk.RadioAction
++gtk.ActionGroup
++gtk.EntryCompletion
++gtk.IconFactory
++gtk.IconTheme
++gtk.IMContext
+| +gtk.IMContextSimple
+| ‘gtk.IMMulticontext
++gtk.ListStore
++gtk.RcStyle
++gtk.Settings
++gtk.SizeGroup
++gtk.Style
++gtk.TextBuffer
++gtk.TextChildAnchor
++gtk.TextMark
++gtk.TextTag
++gtk.TextTagTable
++gtk.TreeModelFilter
++gtk.TreeModelSort
++gtk.TreeSelection
++gtk.TreeStore
++gtk.UIManager
++gtk.WindowGroup
++gtk.gdk.DragContext
++gtk.gdk.Screen
++gtk.gdk.Pixbuf
++gtk.gdk.Drawable
+| +gtk.gdk.Pixmap
+mage
++gtk.gdk.PixbufAnimation
++gtk.gdk.Device
+gobject.GObject
+|
++gtk.CellLayout
++gtk.Editable
++gtk.CellEditable
++gtk.FileChooser
++gtk.TreeModel
++gtk.TreeDragSource
++gtk.TreeDragDest
++gtk.TreeSortable
+
+\section{Widgets Without Windows}
+下面的部件没有关联的窗口。如果你想捕捉事件，你将不得不使用
+事件盒。请参阅事件盒构件。	
+
+gtk.Alignment
+gtk.Arrow
+gtk.Bin
+gtk.Box
+gtk.Button
+gtk.CheckButton
+gtk.Fixed
+gtk.Image
+gtk.Label
+gtk.MenuItem
+gtk.Notebook
+gtk.Paned
+gtk.RadioButton
+gtk.Range
+gtk.ScrolledWindow
+gtk.Separator
+gtk.Table
+gtk.Toolbar
+gtk.AspectFrame
+gtk.Frame
+gtk.VBox
+gtk.HBox
+gtk.VSeparator
+gtk.HSeparator
+反过来检查每一个部件，创建一些简单的例子，我们将进一步探索的PyGTK
+来显示它们。	
+

@@ -1,0 +1,121 @@
+\chapter{介绍}
+	PyGTK 2.0 是一套提供GTK+ 2.X的python接口的Python模块.
+	在整个的其余部分文件PyGTK的是指PyGTK的2.X版本的GTK和
+	GTK +的2.X版本的GTK+。
+
+	主要网站PyGTK的www.pygtk.org [http://www.pygtk.org]。
+
+	PyGTK的主要作者:
+
+	James Henstrdge james@daa.comau[mailto:james@daa.com.au]
+
+
+	Python是一个可扩展的，面向对象的解释性编程语言，它提供
+	了一组丰富的模块，提供了大量的操作系统服务,互联网服务
+	(如HTML，XML，FTP等),图形（包括OpenGL，TK等）,字符串
+	处理函数,邮件服务(IMAP，SMTP，POP3等),多媒体(音频,JPEG)
+	和加密服务。此外，还有许多其他的模块可从第三
+	当事人提供许多其他服务。 Python是授权根据类似的LGPL许可
+	的条款和供的Linux，UNIX，Windows和Macintosh操作系统.
+	关于Python的更多信息可在
+	www.python.org
+
+	Python的主要作者:
+
+	Gui van Rossum guido@python.org[mailto:guido@python.org]
+
+
+	GTK（GIMP工具包）是一个库，用于创建图形用户界面。这是授权
+	使用LGPL许可证，所以你可以开发开放的软件，免费软件，甚至
+	是商业的非自由软件使用GTK，而不必花费任何牌照或特许权使用费。	
+
+
+	这就是所谓的，因为它最初是为开发GNU图像处理程序GIMP工具包
+	(GIMP)，但GTK目前已被用于大量的软件项目，包括GNU网络对象
+	模型环境（GNOME）项目。这基本上是一个GTK建立在GDK(GIMP绘图工具包)的
+	用于访问底层的窗口函数（Xlib中的情况下的X周围的低级别的功能的包装
+	Windows系统）。
+	
+	GTK的主要作者是：
+
+	Peter Mattis petm@xcf.berkeley.edu [mailto:petm@xcf.berkeley.edu]
+	Spencer Kimball spencer@xcf.berkeley.edu [mailto:spencer@xcf.berkeley.edu]
+	Josh MacDonald jmacd@xcf.berkeley.edu [mailto:jmacd@xcf.berkeley.edu]
+	GTK目前维护者：
+	Owen Taylor otaylor@redhat.com [mailto:otaylor@redhat.com]
+	Tim Janik timj@gtk.org [mailto:timj@gtk.org]
+
+	GTK本质上是一个面向对象的应用程序接口（API）。虽然完全用C编写的，
+	使用类和回调函数（函数指针）的想法。
+	还设有一个称为GLib的第三成分，包含了一些替代一些标准的呼叫，以及一些
+	处理链表的额外的功能，使用等的替换功能，以增加GTK的可移植性，作为
+	在这里实现的功能是不可用或其他的unix系统如g\_strerror（）是非标准的。
+	有的还含有增强的libc版本，如g\_malloc，增强的调试工具。
+	在2.0版本中，GLib的拿起了类型系统构成的基础GTK的类层次结构，信号
+	系统，用于整个GTK，一个线程API抽象的各种不同的本地线程API
+	平台和设备加载模块。
+
+	作为最后一个组件，GTK国际化文本输出，使用Pango库。
+	本教程描述了Python接口，GTK +是基于GTK + 2.0教程写的托尼大风，
+	伊恩主。本教程试图尽可能多的PyGTK记录，但并不完整。
+
+	本教程假定Python的一些理解，以及如何创建和运行Python程序。如果你不
+	熟悉Python，请阅读的Python教程
+	[http://www.python.org/doc/current/tut/tut.html的]第一个。这
+	教程不承担GTK的理解，如果你正在学习PyGTK的学习GTK，请发表评论
+	你是如何找到本教程中，你遇到了麻烦。本教程并没有说明如何编译或安装
+	Python和GTK +或PyGTK的。
+	这份教程是基于:
+	GTK+ 2.0 through GTK+ 2.4
+	Python 2.2
+	PyGTK 2.0 through PyGTK 2.4
+	这些示例是在RedHat 9.0系统，编写和测试。
+	该文件是一个“正在进行的工作”。敬请期待更新www.pygtk.org[http://www.pygtk.org/pygtktutorial。
+	我很希望听到你有学习PyGTK的从本文档中的任何问题，将不胜感激
+	如何可以提高输入。请贡献的详细信息，请参见。如果您遇到
+	错误请对pygtk的项目，提交一个bug在bugzilla.gnome.org [http://bugzilla.gnome.org。信息
+	www.pygtk.org [http://www.pygtk.org/feedback.html有关Bugzilla的帮助。
+	PyGTK的2.0参考手册提供http://www.pygtk.org/pygtkreference。它详细描述了
+	PyGTK的类。
+	PyGTK的网站（www.pygtk.org [http://www.pygtk.org]）包含了其他有用的学习资源
+	PyGTK的包括广泛的常见问题[http://www.async.com.br/faq/pygtk/]和其他文章和教程的链接
+	和活跃的邮件列表和IRC频道（]的详细信息，请参阅www.pygtk.org [http://www.pygtk.org/feedback.html）。	
+	\section{探索PyGTK}
+	约翰·达林写了一个小的Python在Linux上运行的程序(pygtkconsole.py[的例子/pygtkconsole.py])
+	允许的PyGTK的互动探索。该方案提供了Python的交互式解释器接口,
+	与一个子进程执行的，输入的命令。默认情况下，PyGTK的模块被加载。
+	会议是一个简单的例子：
+	{\fontspec{FreeMono}
+	\begin{lstlisting}[language=Python]
+	moe: 96:1095$pygtkconsole.py
+	Python 2.2.2, PyGTK 1.99.14 (Gtk+ 2.0.6)
+	Interactive console to manipulate GTK+ widgets.
+	>>> w=Window()
+	>>> b=Button(’Hello’)
+	>>> w.add(b)
+	>>> def hello(b):
+	...
+	print "Hello, World!"
+	...
+	>>> b.connect(’clicked’, hello)
+	5
+	>>> w.show_all()
+	>>> Hello, World!
+	Hello, World!
+	Hello, World!
+	>>> b.set_label("Hi There")
+	>>>
+	\end{lstlisting}
+}
+	这将创建一个窗口，包含一个按钮，点击时打印一条消息(“你好，世界！”)。
+	这个程序使得它轻易尝试各种的GTK窗口小部件和PyGTK接口。
+	
+
+	我也用一个程序，由Brian McErlean开发ActiveState的配方65109 
+	[http://aspn.activestate.com/ASPN/Cookbook/Py一些MODS，
+	使其运行PyGTK的2.X使用。我称它gpython.py的例子/ gpython.py]。
+	它的工作方式类似于pygtkconsole.py [的例子/ pygtkconsole.py]程序。
+
+	Note
+	这两个程序，不知道在Microsoft Windows，因为它们依赖于特定的Unix
+	接口。

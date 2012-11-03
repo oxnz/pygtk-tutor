@@ -1,0 +1,127 @@
+\chapter{Code Examples}
+\section{scribblesimple.py}
+1 #!/usr/bin/env python
+2
+3 # example scribblesimple.py
+4
+5 # GTK - The GIMP Toolkit
+6 # Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+7 # Copyright (C) 2001-2002 John Finlay
+8 #
+9 # This library is free software; you can redistribute it and/or
+10 # modify it under the terms of the GNU Library General Public
+11 # License as published by the Free Software Foundation; either
+12 # version 2 of the License, or (at your option) any later version.
+13 #
+14 # This library is distributed in the hope that it will be useful,
+15 # but WITHOUT ANY WARRANTY; without even the implied warranty of
+16 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+17 # Library General Public License for more details.
+18 #
+19 # You should have received a copy of the GNU Library General Public
+20 # License along with this library; if not, write to the
+21 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+22 # Boston, MA 02111-1307, USA.
+23
+24
+25 import gtk
+26
+27 # Backing pixmap for drawing area
+28 pixmap = None
+29
+30 # Create a new backing pixmap of the appropriate size
+31 def configure_event(widget, event):
+32
+global pixmap
+33
+34
+x, y, width, height = widget.get_allocation()
+35
+pixmap = gtk.gdk.Pixmap(widget.window, width, height)
+36
+pixmap.draw_rectangle(widget.get_style().white_gc,
+37
+True, 0, 0, width, height)
+38
+39
+return True
+40
+41 # Redraw the screen from the backing pixmap
+42 def expose_event(widget, event):
+43
+x , y, width, height = event.area
+44
+widget.window.draw_drawable(widget.get_style().fg_gc[gtk.STATE_NORMAL],
+45
+pixmap, x, y, x, y, width, height)
+46
+return False
+# Draw a rectangle on the screen
+def draw_brush(widget, x, y):
+rect = (x - 5, y - 5, 10, 10)
+pixmap.draw_rectangle(widget.get_style().black_gc, True,
+rect[0], rect[1], rect[2], rect[3])
+widget.queue_draw_area(rect[0], rect[1], rect[2], rect[3])
+def button_press_event(widget, event):
+if event.button == 1 and pixmap != None:
+draw_brush(widget, event.x, event.y)
+return True
+def motion_notify_event(widget, event):
+if event.is_hint:
+x, y, state = event.window.get_pointer()
+else:
+x = event.x
+y = event.y
+state = event.state
+if state & gtk.gdk.BUTTON1_MASK and pixmap != None:
+draw_brush(widget, x, y)
+return True
+def main():
+window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+window.set_name ("Test Input")
+vbox = gtk.VBox(False, 0)
+window.add(vbox)
+vbox.show()
+window.connect("destroy", gtk.mainquit)
+# Create the drawing area
+drawing_area = gtk.DrawingArea()
+drawing_area.set_size_request(200, 200)
+vbox.pack_start(drawing_area, True, True, 0)
+drawing_area.show()
+# Signals used to handle backing pixmap
+drawing_area.connect("expose_event", expose_event)
+drawing_area.connect("configure_event", configure_event)
+# Event signals
+drawing_area.connect("motion_notify_event", motion_notify_event)
+drawing_area.connect("button_press_event", button_press_event)
+drawing_area.set_events(gtk.gdk.EXPOSURE_MASK
+| gtk.gdk.LEAVE_NOTIFY_MASK
+| gtk.gdk.BUTTON_PRESS_MASK
+| gtk.gdk.POINTER_MOTION_MASK
+| gtk.gdk.POINTER_MOTION_HINT_MASK)
+103
+104
+# .. And a quit button
+105
+button = gtk.Button("Quit")
+106
+vbox.pack_start(button, False, False, 0)
+107
+108
+button.connect_object("clicked", lambda w: w.destroy(), window)
+109
+button.show()
+110
+111
+window.show()
+112
+113
+gtk.main()
+114
+115
+return 0
+116
+117 if __name__ == "__main__":
+118
+main()
+

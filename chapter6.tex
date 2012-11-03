@@ -1,0 +1,141 @@
+\chapter{The Button Widget}
+\section{Normal Buttons}
+我们几乎可以看到所有有看到的按钮小部件。这是很简单的。您可以使用gtk.Button的（）函数
+创建一个有标签的按钮，通过一个字符串参数，或不指定一个标签字符串创建一个空白的按钮。
+这是给你收拾到这个新的按钮标签或像素。要做到这一点，创建一个新的框，然后收拾你
+在此框中使用通常的pack_start的（）方法，然后使用add（）方法的对象包装盒到
+按钮。
+创建一个按钮的功能是：
+button = gtk.Button(label=None, stock=None)
+如果指定标签文本，它被用作按钮上的文字。如果股票指定用它来选择股票的图​​标和文字
+按钮标签。库存项目是：	
+STOCK_DIALOG_INFO
+STOCK_DIALOG_WARNING
+STOCK_DIALOG_ERROR
+STOCK_DIALOG_QUESTION
+STOCK_DND
+STOCK_DND_MULTIPLE
+STOCK_ADD
+STOCK_APPLY
+STOCK_BOLD
+STOCK_CANCEL
+STOCK_CDROM
+STOCK_CLEAR
+STOCK_CLOSE
+STOCK_CONVERT
+STOCK_COPY
+STOCK_CUT
+STOCK_DELETE
+STOCK_EXECUTE
+STOCK_FIND
+STOCK_FIND_AND_REPLACE
+STOCK_FLOPPY
+STOCK_GOTO_BOTTOM
+STOCK_GOTO_FIRST
+STOCK_GOTO_LAST
+STOCK_GOTO_TOP
+STOCK_GO_BACK
+STOCK_GO_DOWN
+STOCK_GO_FORWARD
+STOCK_GO_UP
+STOCK_HELP
+STOCK_HOME
+STOCK_INDEX
+STOCK_ITALIC
+STOCK_JUMP_TO
+STOCK_JUSTIFY_CENTER
+STOCK_JUSTIFY_FILL
+STOCK_JUSTIFY_LEFT
+STOCK_JUSTIFY_RIGHT
+STOCK_MISSING_IMAGE
+STOCK_NEW
+STOCK_NO
+STOCK_OK
+STOCK_OPEN
+STOCK_PASTE
+STOCK_PREFERENCES
+STOCK_PRINT
+STOCK_PRINT_PREVIEW
+STOCK_PROPERTIES
+STOCK_QUIT
+STOCK_REDO
+STOCK_REFRESH
+STOCK_REMOVE
+STOCK_REVERT_TO_SAVED
+STOCK_SAVE
+STOCK_SAVE_AS
+STOCK_SELECT_COLOR
+STOCK_SELECT_FONT
+STOCK_SORT_ASCENDING
+STOCK_SORT_DESCENDING
+STOCK_SPELL_CHECK
+STOCK_STOP
+STOCK_STRIKETHROUGH
+STOCK_UNDELETE
+STOCK_UNDERLINE
+STOCK_UNDO
+STOCK_YES
+STOCK_ZOOM_100
+STOCK_ZOOM_FIT
+STOCK_ZOOM_IN
+STOCK_ZOOM_OUT
+[的例子/ buttons.py]的buttons.py程序提供了一个示例使用gtk.Button（）来创建一个按钮，
+在它的图像和一个标签。我已经打破了代码的其余部分，所以你可以用它在你的程序中创建一个长方体。
+使用图像在本教程后面还有更多的例子。图6.1中，像素图和标签“显示”按钮
+该窗口，其中包含一个按钮，一个pixmap和标签：	
+The source code for the button.py [examples/buttons.py] program is:
+
+第12-34行定义的xpm_label_box（）辅助函数创建一个水平框的边框宽度为2
+（行14-15），填充它的图像（22-23线）和标签（第26行）。
+第36-70行定义的按钮类。第41-70行定义创建一个实例初始化方法
+窗口（线43），标题设置（第45行），连接的“delete_event”和“destroy”信号（线48-49）。第55行
+没有标签的创建按钮。它的“clicked”信号被连接到的回调（）方法中第58行。 “
+在第61行创建的图像和标签放置在64行中的按钮xpm_label_box（）函数被调用。
+xpm_label_box（）函数可以使用到任何部件，可以是一个容器来包装xpm和标签。
+按钮小部件有下列信号：
+
+pressed - emitted when pointer button is pressed within Button widget
+released - emitted when pointer button is released within Button widget
+clicked - emitted when pointer button is pressed and then released within Button widget
+enter - emitted when pointer enters Button widget
+leave - emitted when pointer leaves Button widget
+\section{Toggle Buttons}
+来自普通按钮和切换按钮是非常相似的，但他们将永远在两种状态之一，
+交替的点击。他们可能会沮丧，当你再次点击，他们将重新弹出。再次点击，并且他们
+会弹出回落。
+切换按钮复选按钮和单选按钮的基础，正因为如此，许多用于切换按钮的电话
+单选和复选按钮继承。我会把它们指出，当我们来到他们。
+创建一个新的切换按钮：
+toggle_button = gtk.ToggleButton(label=None)
+
+正如你可以想像，这些工作等同于一般按钮调用。如果没有指定标签的按钮
+是空白的。 _'前缀的助记字符的标签文本将被解析。
+要检索的切换窗口小部件，包括单选和复选按钮的状态，我们用一个结构所示，在我们的
+下面的例子。这个测试的状态切换，切换按钮的对象调用get_active（）方法。
+我们感兴趣的信号发出的开关按钮（开关按钮，复选按钮，单选按钮部件）
+是“toggled”信号。要检查这些按钮的状态，设置了一个信号处理程序捕捉的触发信号，并
+访问对象的属性，以确定其状态。回调将是这个样子：
+def toggle_button_callback(widget, data):
+if widget.get_active():
+# If control reaches here, the toggle button is down
+else:
+# If control reaches here, the toggle button is up
+受力状态的切换按钮，和它的孩子，单选和复选按钮，使用此方法：
+toggle_button.set_active(is_active)
+上述方法中，可以使用的状态进行设置的切换按钮，以及它的儿童的无线电和检查按钮。
+指定一个TRUE或FALSE的is_active参数的指示按钮是否应了下来（郁闷）
+（释放）。当切换按钮创建它的默认值是或FALSE。
+请注意，当你使用set_active（）方法，实际上是改变状态时，它会导致“点击”和
+“切换”的信号从按钮被发射。
+toggle_button.get_active()
+此方法返回一个布尔值TRUE或FALSE值的切换按钮的当前状态。
+的togglebutton.py [的例子/ togglebutton.py]程序提供了一个简单的例子，使用切换按钮。如图6.2所示，
+“切换按钮示例”说明了窗口的第二个切换按钮积极：
+The source code for the program is:
+
+
+有趣的是12-13定义的回调函数（）方法切换按钮，打印的标签和它的状态
+当它被切换。第45和第59行“切换”信号的切换按钮的回调（）方法。
+\section{Check Buttons}
+\section{Radio Buttons}
+
