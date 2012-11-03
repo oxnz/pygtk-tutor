@@ -1,1 +1,111 @@
 \chapter{Range Widgets}
+范围构件的类别包括无处不在的滚动条控件和不常见的“规模”小部件。
+虽然这两个类型的部件通常是用于不同的目的，它们在功能上是非常相似的，并
+实施。所有范围构件共享一组共同的图形元素，每一个都具有其自己的X窗口和
+接收事件。它们都含有一个“槽”和“滑块”（有时也被称为“指轮”在其他GUI
+环境）。拖动滑块的指针移动，来回在低谷，而点击
+槽朝向点击的位置的滑块前进，要么完全，或通过指定的量，这取决于
+使用鼠标按钮。
+第7章中提到，上述调整，所有范围构件相关联的调整对象，从
+它们计算的滑动件和其内的槽的位置的长度。当用户操纵滑块，
+范围构件的调整值将改变。
+\section{Scrollbar Widgets}
+这是你的标准，运行的磨滚动条。这些应只用于一些其他的部件，例如滚动
+作为一个列表，文本框，或一个视口（它通常更容易使用，滚动窗口小部件在大多数情况下）。对于其他
+的目的，你应该使用规模小部件，因为他们是友好的和更多的其他功能。
+有不同的类型，水平和垂直滚动条。实在没有多说这些。您可以创建
+用下面的方法：
+hscrollbar = gtk.HScrollbar(adjustment=None)
+vscrollbar = gtk.VScrollbar(adjustment=None)
+这就是它。调整参数可以是一个参考现有的调整（参见第7章，
+调整），或什么都没有，在这种情况下，将创建一个适合你。不指定其他任何可能的情况下是有用的，
+你想给新创建的调整，其他一些小部件的构造函数将
+为您配置，如文本部件。
+\section{Scale Widgets}
+比例构件使用，以允许用户直观地选择和操作在一个特定的范围内的值。您可能
+要使用的规模小部件，例如，在缩放后的一幅图片的预览调整的放大级别，或
+控制亮度的颜色，或指定一个屏幕保护程序会在不活动的分钟数前
+屏幕上。	
+\subsection{Creating a Scale Widget}
+带滚动条的水平和垂直缩放窗口小部件，有不同类型的组件。 （大多数程序员似乎
+有利于水平的比例构件。），因为他们的工作方式基本相同，没有必要分别对待
+在这里。下面的方法创建垂直和水平刻度的小部件，分别为：
+vscale = gtk.VScale(adjustment=None)
+hscale = gtk.HScale(adjustment=None)
+的调整参数可以是一个已经被创建gtk.Adjustment（调整）
+，或什么都没有，在这种情况下，所有的值设置为0.0（这是不是创建一个匿名的调整
+在这种情况下，非常有用）。为了避免混淆自己，你可能需要创建你的调整与
+PAGE_SIZE的0.0，使得其上的值实际上对应于用户可以选择的最高值。 （如果你
+已经彻底被搞糊涂，请参阅第7章，调整的解释，究竟调整
+以及如何创建和操纵它们。）
+\subsection{Methods and Signals(well, methods, at least)
+规模小部件可以显示其当前值作为旁边的槽数。默认行为是显示
+值，但你可以改变这个方法：
+scale.set_draw_value(draw_value)
+正如你可能已经猜到了，draw_value是TRUE或FALSE，任何一个可预见的后果。
+规模小部件显示的值四舍五入到一个小数点默认情况下，是在其领域
+调整。您可以更改：
+scale.set_digits(digits)
+其中数字是多少你想要的小数位数。您可以设置任何你喜欢的数字，但不超过
+13位小数实际上是画在屏幕上。
+最后，可以得出在不同的位置相对的低谷：
+scale.set_value_pos(pos)
+The argument pos can take one of the following values:
+POS_LEFT
+POS_RIGHT
+POS_TOP
+POS_BOTTOM
+如果你的位置“侧”的槽（例如，在某一水平刻度的窗口小部件的顶部或底部）上的值,
+然后它将跟随滑块上下的低谷。
+\section{Common Range Methods}
+widget类的范围是相当复杂的内部，但是，像所有的“基类”的小工具，它的复杂性
+是有趣的，如果你想破解它。此外，几乎所有定义的方法和信号，它是唯一真正使用
+在编写派生部件。然而，有几个有用的方法，将工作范围的所有部件。
+\subsection{Setting the Update Policy}
+范围构件的“更新策略”的定义在什么点在用户交互，它会改变的值字段
+其调整，并在此调整发出“value_changed的”信号。更新策略：	
+UPDATE_CONTINUOUS
+这是默认的。 “value_changed”信号发出连续
+ously，也就是说，只要滑块移动即使是最微小的量。
+UPDATE_DISCONTINUOUS
+一旦滑块具有的“value_changed”信号仅发射
+停止移动用户释放鼠标按钮。
+UPDATE_DELAYED
+“value_changed”信号被发射时，在用户释放
+鼠标按钮时，或者如果滑块停止移动一个短周期的
+时间。
+可以通过将它传递给这个方法的一系列部件的更新策略：
+range.set_update_policy(policy)
+\subsection{Getting and Setting Adjustments}
+获取和设置进行调整范围构件“对飞”，可以预见，随着
+adjustment = range.get_adjustment()
+range.set_adjustment(adjustment)
+get_adjustment（）方法返回一个连接范围的调整。
+的set_adjustment（）方法做绝对没问题，如果你传递给它的调整范围已经
+使用，无论您是否更改任何领域或。如果你传递一个新的调整，它会解除引用
+旧的（如果它存在可能破坏它），适当的信号连接到新的，重新计算
+尺寸和/或滑块的位置，如果需要重绘。正如前面提到的部分调整，如果你想
+重复使用相同的调整，当你直接修改它的值，你应该发出的“改变”的信号就可以了，如
+这样的：	
+adjustment.emit("changed")
+\section{Key and Mouse Bindings}
+所有GTK +范围的部件或多或少以同样的方式作出反应，鼠标点击。点击按钮在低谷
+将导致其调整的page_increment，要添加或减去其值，和滑块是movedaccordingly。单击鼠标按钮处于低谷，会跳转滑块按钮被点击的点。
+点击任何一个滚动条的箭头按钮，将导致其调整的值来改变step_increment，在同一时间。
+不可作为焦点，滚动条，因此没有键绑定。的键绑定的其他范围构件（这是，
+当然，只有当widget具有焦点）不区分水平和垂直范围构件。
+所有范围构件可以操作的左箭头，右箭头，向上和向下箭头键，以及与
+Page Up和Page Down键。箭头移动滑块step_increment，而Page Up和Page Down键
+来移动page_increment。
+用户还可以移动滑块的一端的方式或其他的槽使用键盘。这样做是
+Home和End键。
+\section{Range Widget Example}
+该示例程序（rangewidgets.py的例子/ rangewidgets.py]）提出了一个窗口,
+有三个范围构件连接到相同的调整，上述几个控件用于调整的一些参数和
+一节中的调整，所以你可以看到它们是如何影响这些部件的工作方式为用户。图8.1
+“范围构件示例”说明了程序的运行结果：	
+The rangewidgets.py [examples/rangewidgets.py] source code is:
+//TODO
+你会发现，程序不调用的connect（）方法的“delete_event”，但仅限于“消灭”
+信号。这将仍然执行所需的操作，因为未处理的“delete_event”将导致一个“破坏”
+信号被给定的窗口。	

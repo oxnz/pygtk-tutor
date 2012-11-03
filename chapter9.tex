@@ -1,0 +1,135 @@
+\chapter{Miscellaneous Widgets}
+\section{Labels}
+标签都采用了大量GTK，也比较简单。标签发出的信号，因为他们没有相关联的X
+窗口。如果您需要捕获的信号，还是剪裁，把它放在一个事件盒（见第10.1节“事件盒”）
+窗口小部件或一个按钮（参见6.1节，“标准按钮”）部件。
+要创建一个新的标签，使用方法：
+label = gtk.Label(str)
+唯一的参数是你希望标签显示的字符串。要更改标签的文本创建后，使用方法：	
+label.set_text(str)
+标签是前面创建的标签，str是一个新的字符串。将所需要的空间为新的字符串
+自动调整，如果需要的话。您可以生成多行标签，把标签字符串中的换行符。
+要检索的字符串，请使用：
+str = label.get_text()
+标签是你所创建的标签，str是返回的字符串。标签文本可以合理的使用：
+label.set_justify(jtype)
+Jtype的值是：
+JUSTIFY_LEFT # the default
+JUSTIFY_RIGHT
+JUSTIFY_CENTER
+JUSTIFY_FILL # does not work
+标签控件也能自动换行的文本自动。这可以使用被激活：
+label.set_line_wrap(wrap)
+的wrap参数可取TRUE或FALSE值。
+如果你想强调的标签，然后你可以设置一个模式上的标签：
+label.set_pattern(pattern)
+模式参数表示应该看看如何下划线的。它是由一串下划线和空间
+字符。下划线指示应该强调的相应字符的标签。例如，
+“____”的字符串，将突出的前两个字符和第四个和第五个字符。如果你只是想
+在标签中有下划线的快捷键（“助记”），你，应使用set_text_with_mnemonic（STR），
+不是set_pattern（）。
+本label.py [的例子/ label.py]程序是一个简单的例子来说明这些方法。这个例子使用
+框架（参见10.5节，“框架”）的小工具，以更好地示范标签的风格。现在，您可以忽略此
+稍后解释框架构件。
+在GTK + 2.0，可以包含标签文本标记的字体和其他文本属性的变化，标签可以选择（为
+复制和粘贴）。这些先进的功能将无法解释。
+图9.1中，“标签的例子说明了示例程序运行的结果：
+需要注意的是“填充，包裹标签”不填合理。
+\section{Arrows}
+箭头构件绘制一个箭头，面对一些可能的方向，并且具有许多可能的
+风格。在许多应用中放置一个按钮时，它可以是非常有用的。标签构件一样，它发出的信号。
+只有两个要求操纵一个箭头构件：	
+arrow = gtk.Arrow(arrow_type, shadow_type)
+arrow.set(arrow_type, shadow_type)
+首先创建一个新的箭头指定的类型和外观部件。第二个允许这些值
+改变了回顾性分析。 arrow_type参数可以采取下列值之一：
+ARROW_UP
+ARROW_DOWN
+ARROW_LEFT
+ARROW_RIGHT
+hadow_type的参数可能需要
+下列值之一：
+SHADOW_IN
+SHADOW_OUT # the default
+SHADOW_ETCHED_IN
+SHADOW_ETCHED_OUT
+该arrow.py [的例子/ arrow.py]示例程序中简要说明了它们的使用。图9.2中，“箭头按钮
+示例“显示程序运行的结果：	
+The source code for arrow.py [examples/arrow.py] is:
+\section{The Tooltips Object}
+工具提示弹出时，你离开你的指针在按钮上或其他部件换了几个小的文本字符串
+秒。
+不接收事件（没有自己的窗口小部件）的小工具将无法正常工作与工具提示。
+您将使用第一次调用创建一个新的工具提示。您唯一需要做的这一套工具提示的一次
+gtk.Tooltips反对该函数返回可用于创建多个工具提示。	
+tooltips = gtk.Tooltips()
+一旦你创建了一个新的工具提示，你想用它的小部件，只需使用这个调用来设置：
+tooltips.set_tip(widget, tip_text, tip_private=None)
+工具提示的对象是你已经创建的工具提示。 （widget）是第一个参数的窗口小部件
+希望有这个工具提示弹出，第二个（标题文字将为），你希望显示的文字。最后一个参数
+（tip_private）是一个文本字符串，可以用作标识符。
+该tooltip.py [的例子/ tooltip.py]示例程序修改arrow.py的[实例/ arrow.py]程序添加一个
+为每个按钮的工具提示。图9.3，“工具提示示例”说明了生成的工具提示显示第二
+箭头按钮显示:
+The source code for tooltip.py [examples/tooltip.py] is:
+还有其它的方法，可以用来与工具提示。我只列出他们的简要说明他们做了什么。
+tooltips.enable()
+启用已禁用的工具提示。	
+tooltips.disable()
+禁用激活的工具提示。
+tooltips.set_delay（延迟）
+设置多少毫秒，你必须保持你的鼠标指针在构件的工具提示会弹出。默认的
+是500毫秒（半秒）。
+而这一切的方法与工具提示有关。更多比你曾经想知道:)
+\section{Progress Bars}
+进度条是用来显示状态的操作。他们是非常容易使用，你会看到与代码
+以下。但是，首先让我们开始调用来创建一个新进度条。
+progressbar = gtk.ProgressBar(adjustment=None)
+adjustment参数指定一个调整的进度条使用。如果没有指定，调整
+将被创建。现在的进度条已经创建，我们可以使用它。
+progressbar.set_function(fraction)
+ProgressBar对象是你希望操作的进度条，参数(fraction)是“已完成”的部分,这意味着
+从0-100％的进度条已经充满。这是传递给该方法作为一个真正的号，取值范围从0到1。
+
+一个进度条的数量使用该方法的取向中的一个可以被设置为：
+progressbar.set_orientation(orientation)
+orientation参数可以取下列值之一来表示，其中的方向的进展
+酒吧的移动方式：
+PROGRESS_LEFT_TO_RIGHT
+PROGRESS_RIGHT_TO_LEFT
+PROGRESS_BOTTOM_TO_TOP
+PROGRESS_TOP_TO_BOTTOM
+以及指示已发生的量的进展，进度条可以被设置为仅仅指示有
+一些活动。这可能是有用的情况下，进步不能衡量一个数值范围。下面
+功能表示已经取得了一些进展。
+progressbar.pulse()
+活动指示灯的步长，使用下面的函数的分数为0.0和1.0之间。
+progressbar.set_pulse_step(fraction)
+而不是在活动模式时，进度条可以显示一个可配置的文本字符串的低谷，使用
+下面的方法：
+progressbar.set_text(text)
+Note:
+请注意，set_text（）不支持的printf（）之类的格式的GTK + 1.2的进度条。
+再次的调用set_text（）不带参数的，您可以关闭显示的字符串。
+目前可以检索的文本设置一个进度用以下的方法：
+text = progressbar.get_text()
+进度条通常使用超时或其他类似的功能（请参见第19章，超时，IO和待机功能）
+多任务的假象。所有这些都将采用set_fraction（）或脉冲（）方法，以同样的方式。
+[的例子/ progressbar.py]的progressbar.py程序提供了一个更新的进度条的例子，使用
+超时。此代码也演示了如何重置进度条。图9.4中，“进度条例”说明
+结果显示：
+The source code for progressbar.py [examples/progressbar.py] is:
+
+\section{Dialogs}
+\section{Images}
+\section{Pixmaps}
+\section{Rulers}
+\section{Statusbars}
+\section{Text Entries}
+\section{Spin Buttons}
+\section{Combo Widget}
+\section{Calendar}
+\section{Color Selection}
+\section{File Selectoins}
+\section{Font Selection Dialog}
+
