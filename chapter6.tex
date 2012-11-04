@@ -137,5 +137,37 @@ The source code for the program is:
 有趣的是12-13定义的回调函数（）方法切换按钮，打印的标签和它的状态
 当它被切换。第45和第59行“切换”信号的切换按钮的回调（）方法。
 \section{Check Buttons}
-\section{Radio Buttons}
+复选按钮继承的切换按钮，上面的许多属性和方法，但看起来有点不同。比较
+除了按钮内的文本，有个小方块的文字，他们的权利。这些经常被用来
+用于切换的选项和关闭在应用程序中。
+的创建方法是类似的普通按钮。
+check_button = gtk.CheckButton(label=None)
+如果在标签中指定参数的方法创建一个标签旁边的一个复选按钮。标签文本分析
+'_'前缀的助记字符。
+检查和设置复选按钮的状态是相同的切换按钮。
+的checkbutton.py [的例子/ checkbutton.py]的复选按钮的使用程序提供了一个例子。
+图6.3中，“检查按钮实例说明了生成的窗口：
+The source code for the checkbutton.py [examples/checkbutton.py] program is:
 
+\section{Radio Buttons}
+单选按钮，check按钮很像，除了它们是成群所以，只有一个可能的选择/在郁闷
+时间。这是良好的地方在你的应用程序，你需要一个简短的选项列表中选择。
+这个调用创建一个新的单选按钮：
+radio_button = gtk.RadioButton(group=None, label=None)
+你会发现额外的参数，这个调用。单选按钮需要一组正常运作。第一次调用
+，gtk.RadioButton（）应该通过“无”作为第一个参数，将创建一个新的单选按钮组
+新的单选按钮作为其唯一的成员。
+要添加更多的一组单选按钮，通过在一个组中的单选按钮，在随后的调用
+gtk.RadioButton（）。
+如果标签参数指定的文本将被解析为_'前缀的助记字符。
+显式设置的按钮应该是默认按下按钮，这也是一个不错的主意：
+radio_button.set_active(is_active)
+这在开关按钮部分中描述的，并在完全相同的方式工作。一旦单选按钮
+组合在一起，只有一个可能对本集团的时间。如果用户点击一个单选按钮，然后在
+，第一个单选按钮会先发出“toggled”信号（以报告变得不活动），然后在第二个
+发出“toggled”信号（以报告变得激活）。
+示例程序radiobuttons.py [的例子/ radiobuttons.py]有三个按钮，创建一个单选按钮组。
+图6.4“单选按钮示例”说明了生成窗口：
+The source code for the example program is:
+该代码是相当直接的。第63-64行作出的“关闭”按钮的默认控件，按下“Enter”
+关键窗口处于活动状态时，会导致“关闭”按钮发出“clicked”信号。
