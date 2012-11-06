@@ -16,7 +16,9 @@ def progress_timeout(pbobj):
 		# value range set in the adjustment object
 		new_val = pbobj.pbar.get_fraction() + 0.01
 		if new_val > 1.0:
-			new_val = 0.0
+			new_val = 1.0
+		#TODO
+		#	new_val = 0.0
 		# Set the new value
 		pbobj.pbar.set_fraction(new_val)
 	
