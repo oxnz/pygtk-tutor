@@ -1,25 +1,154 @@
 \chapter{TextView Wdiget}
-\section{TextView Overview}
+\section{TextView 概览}
+TextView 小部件以及和它相关的对象(TextBuffers, TextMarks, TextIters, TextTags 和TextTagTables)提供了一个强有力的多行文本编辑的框架。
+一个TextBuffer(see Section 13.3, "Text Buffers")包含了将要显示的文本和一个或多个TextView小部件。
+在GTK+ 2.0中，文本是以UTF-8格式编码的，也就意味着一个字符可能be encoded as multiple bytes.在TextBuffer内,有必要区分的字符计数（称为偏移量offsets）的字节计数（称为indexes）。
+
+TextIters提供了TextBuffer内的位置的一个volatile representation在两个字符之间。TextIters一直有效到TextBuffer内的字符数变化为止；也就是说，任何时候TextBuffer中插入或者删除字符都会使TextIters失效。TextIters是primary way在操作TextBuffer中的文本的时候指定位置。
+TextMarks中所提供TextMarks到允许保存缓冲区修改TextBuffer不同位置。一个标记
+（见第13.4节，的“文本Iters”）像一个TextIter的，因为它代表在两个字符之间的位置
+TextBuffer），但如果周围的标记被删除的文字标记仍然被删除的内容。
+同样地，如果文本被插入在该标记的标记结束取决于插入的文本的左侧或右侧的
+重力的马克 - 右重力离开标记的右侧的插入的文本，而左重力离开它向左。
+TextMarks（见第13.5节，“文本标记”）可能会被命名或匿名的，如果没有给定一个名称。每个TextBuffer
+有两个预定义的的命名TextMarks（见第13.5节，“文本标记”）插入和selection_bound。
+这是指对的插入点和边界的选择（选择之间的插入件和
+selection_bound引号）。
+TextTags（见13.6.1节，“文本标签”）指定的一组属性，可以应用到的范围内的对象
+的文字在TextBuffer。每个TextBuffer都有一个TextTagTable的（参见13.6.2节，“文本变量表”）
+其中包含的标签，可在该缓冲区。 TextTagTables可以共享之间TextBuffers
+提供通用性。的TextTags通常使用来改变外观的文本的范围内，但也可用于
+防止一定范围的文本进行编辑
 \section{TextViews}
+只有一个命令是用来创建一个新的TextView小部件。
+textview = gtk.TextView(buffer=None)
+当一个TextView被创建时它将会默认创建一个关联的TextBuffer和TextTagTable。如果你想使用一个存在的TextBuffer,那么在上边TextView方法中指定。改变一个TextView使用的TextBuffer使用如下方法:
+textview.set_buffer(buffer)
+使用下面的方法来检索一个TextView的TextBuffer参考:
+buffer = textview.get_buffer()
+TextView的小部件没有scrollbars来调整view当文本大于窗口的情况下,
+为了滚动条，可以添加TextView到ScrolledWindow（见10.9节，“滚动窗口”）。
+可以用一个TextView,允许用户编辑文本正文，或显示多行的只读文本的.
+这些操作模式之间切换，使用下面的方法:
+textview.set_editable(setting)
+setting参数是一个TRUE或FALSE值指定是否允许编辑TextView的内容。在TextView的编辑模式，可以覆盖在文本范围内TextBuffer TextTags。
+您可以检索当前的编辑设置，使用方法：
+setting = textview.get_editable()
+当TextView是不可编辑的时候，你或许希望使用如下方法隐藏光标:
+textview.set_cursor_visible(setting)
+setting参数是一个TRUE或FALSE值，指定光标是否应该可以看到在TextView
+可以换行的文本太长，以适应成一条线的显示窗口。它的默认行为是不
+换行。这是可以改变使用的一个方法：
+textview.set_wrap_mode(wrap_mode)
+这种方法允许你指定的文本窗口小部件换行字或字符的边界。 “
+word_wrap参数是下列之一:
+gtk.WRAP_NONE
+gtk.WRAP_CHAR
+gtk.WRAP_WORD
+在TextView的文本的默认对齐方式可以设置和检索使用方法:
+textview.set_justification(justification)
+justification = textview.get_justification()
+justification是下列值之一:
+gtk.JUSTIFY_LEFT
+gtk.JUSTIFY_RIGHT
+gtk.JUSTIFY_CENTER
+注意
+justification将是JUSTIFY_LEFT，如果wrap_mode是WRAP_NONE。在相关联的标签
+TextBuffer可能会覆盖默认的理由。
+其他默认属性，可以在TextView中设置和检索是：左边距，右边距，标签和段
+压痕使用下列方法:
+textview.set_left_margin(left_margin)
+left_margin = textview.get_left_margin()
+textview.set_right_margin(right_margin)
+right_margin = textview.get_right_margin()
+textview.set_indent(indent)
+indent = textview.get_indent()
+textview.set_pixels_above_lines(pixels_above_line)
+pixels_above_line = textview.get_pixels_above_lines()
+textview.set_pixels_below_lines(pixels_below_line)
+pixels_below_line = textview.get_pixels_below_lines()
+textview.set_pixels_inside_wrap(pixels_inside_wrap)
+pixels_inside_wrap = textview.get_pixels_inside_wrap()
+textview.set_tabs(tabs)
+tabs = textview.get_tabs()
+left_margin, right_margin, indent, pixels_above_lines, pixels_below_lines and
+pixels_inside_wrap are specified in pixels. These default values may be overridden by tags in the asso-
+ciated TextBuffer. tabs is a pango.TabArray.
+
+The textview-basic.py [examples/textview-basic.py] example program illustrates basic use of the TextView widget:
+The source code for the program is:
+Lines 10-34 define the callbacks for the radio and check buttons used to change the default attributes of the TextView.
+Lines 55-63 create a ScrolledWindow to contain the TextView. The ScrolledWindow is packed into a VBox
+with the check and radio buttons created in lines 72-140. The TextBuffer associated with the TextView is loaded
+with the contents of the source file in lines 64-70.
+
 \section{Text Buffers}
-\subsection{TextBuffer Status Information}
-\subsection{Creating TextIters}
-\subsection{Text Insertion, Retrieval and Deletion}
-\subsection{TextMarks}
-\subsection{Creating and Applying TextTags}
-\subsection{Inserting Images and Widgets}
+TextBuffer是PyGTK文本编辑系统的核心组件。它包含了文本，在TextTags
+TextTagTable和TextMarks一起描述文本是如何被显示，并且允许用户
+交互式修改的文本和文本显示。正如在上一节一TextBuffer都与一个
+或更TextViews显示TextBuffer内容。
+可以创建一个TextBuffer，时自动创建或它的功能，可以创建一个TextView：	
+textbuffer = TextBuffer(table=None)
+table是一个TextTagTable。如果没有指定table(或者None),将会自动为TextBuffer创建一个TextTagTable.
+有很多方法可以用于:
+• insert and remove text from a buffer
+• create, delete and manipulate marks
+• manipulate the cursor and the selection
+• create, apply and remove tags
+• specify and manipulate TextIters
+• get status information
+	\subsection{TextBuffer Status Information}
+	可以使用如下方法获取textbuffer中的行数:
+	line_count = textbuffer.get_line_count()
+	同样，你可以在textbuffer使用的字符数:
+	char_count = textbuffer.get_char_count()
+	当textbuffer内容变更在textbuffer的修改标志被设置。的修改标志的状态
+	使用该方法，可以检索:
+	modified = textbuffer.get_modified()
+	如果该程序的内容保存,下面的方法可用于重置的修改标志的textbuffer:
+	textbuffer.set_modified(setting)
+	\subsection{Creating TextIters}
+	一个TextIter在TextBuffer两个字符之间的指定位置。 TextBuffer方法
+	，操纵文本使用TextIters，的指定的方法是要应用。 TextIters有大量
+	> TextIters部在将要描述的方法。
+	的基本用于创建TextIters的TextBuffer方法：
+	iter = textbuffer.get_iter_at_offset(char_offset)
+	iter = textbuffer_get_iter_at_line(line_number)
+	iter = textbuffer.get_iter_at_line_offset(line_number, line_offset)
+	iter = textbuffer.get_iter_at_mark(mark)
+	get_iter_at_offset() creates an iter that is just after char_offset chars from the start of the textbuffer.
+	get_iter_at_line() creates an iter that is just before the first character in line_number.
+	get_iter_at_line_offset() creates an iter that is just after the line_offset character in line_number.
+	get_iter_at_mark() creates an iter that is at the same position as the given mark.
+	The following methods create one or more TextIters at specific buffer locations:
+	startiter = textbuffer.get_start_iter()
+	enditer = textbuffer_get_end_iter()
+	startiter, enditer = textbuffer.get_bounds()
+	start, end = textbuffer.get_selection_bounds()
+	get_start_iter() creates an iter that is just before the first character in the textbuffer.
+	get_end_iter() creates an iter that is just after the last character in the textbuffer.
+	unds() creates a tuple of two iters that are just before the first character and just after the last character in the
+	textbuffer respectively.
+	get_selection_bounds() creates a tuple of two iters that have the same location as the insert and
+	selection_bound marks in the textbuffer.
+	\subsection{文本插入，检索和删除}
+	下面的方法可以设置TextBuffer中的文本:
+	textbuffer.set_text(text)
+	\subsection{TextMarks}
+	\subsection{Creating and Applying TextTags}
+	\subsection{Inserting Images and Widgets}
 \section{Text Iters}
-\subsection{TextIter Attributes}
-\subsection{Text Attributes at a TextIter}
-\subsection{Copying a TextIter}
-\subsection{Retrieving Text and Objects}
-\subsection{Checking Conditions at a TextIter}
-\subsection{Checking Location in Text}
-\subsection{Moving Through Text}
-\subsection{Moving to a Specific Location}
-\subsection{Searching in Text}
+	\subsection{TextIter Attributes}
+	\subsection{Text Attributes at a TextIter}
+	\subsection{Copying a TextIter}
+	\subsection{Retrieving Text and Objects}
+	\subsection{Checking Conditions at a TextIter}
+	\subsection{Checking Location in Text}
+	\subsection{Moving Through Text}
+	\subsection{Moving to a Specific Location}
+	\subsection{Searching in Text}
 \section{Text Marks}
 \section{Text Tags and Tag Tables}
-\subsection{Text Tags}
-\subsection{Text Tag Tables}
+	\subsection{Text Tags}
+	\subsection{Text Tag Tables}
 \section{A TextView Example}

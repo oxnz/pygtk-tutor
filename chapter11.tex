@@ -1,5 +1,107 @@
 \chapter{Menu Widget}
-\section{Manual Menu Creation}
-\section{Manual Menu Example}
-\section{Using ItemFactory}
-\section{Item Factory Example}
+pygtk中有两种方式生成菜单:有简单的也有困难的。都有自己的用户，但是你通常可以使用ItemFactory(简单方式)。‘hard’方式是直接使用调用生成所有菜单。简单的方式使用gtk.ItemFactory调用。这个一个很简单的，但是每个都有各自的优缺点。
+Note
+在PyGTK 2.4 ItemFactory 被废弃了-使用UIManager代替了。
+ItemFactory使用起来更简单，并添加新的菜单，虽然写一些包装函数来
+创建菜单使用手动的方法可以有更好的可用性。使用Itemfactory是不可以给菜单添加图像或'/'字符的。
+\section{手工创建菜单} %Manual Menu Creation
+在传统的实际教学中，我们首先向你展示复杂的方式.:)
+有三个小工具，进入一个菜单栏和子菜单:
+•一个菜单项，这是用户想要什么选择，例如，“保存”
+•一个菜单，作为容器的菜单项，
+•菜单栏，这是一个容器为每个单独的菜单。
+这是稍微复杂的菜单项构件用于两个不同的东西。它们都是
+部件组装到菜单，和被打包到菜单栏，选择时，激活的小工具
+菜单。
+让我们来看看，用于创建菜单和菜单栏的功能。这第一项功能是用来创建一个新的
+菜单栏:
+menu_bar = gtk.MenuBar()
+这个相当自我解释的函数创建一个新的菜单栏。您可以使用gtk.Container的add（）方法来收拾
+这成窗口，或gtk.Box的包装方法，将它打包成箱 - 按钮一样。
+menu = gtk.Menu()
+这个函数返回一个对新菜单的引用;它从来都不会真正的显示(with the show() method)，
+它只是一个菜单项的容器。我希望你在看下面例子的时候能够理解的更清楚。
+
+下一个函数是用于创建被打包进菜单(and menubar)的菜单项.
+menu_item = gtk.MenuItem(label=None)
+这个label，如果有的话，将被解析助记字符。这个调用被用于创建将要显示的菜单项。请记住，区分与gtk.Menu（）和“菜单项的”菜单“创建”创建
+由gtk.MenuItem（）函数。该menu item将是一个真实的按钮执行相应的操作，而
+menu将是菜单项的容器。
+
+一旦你已经创建了一个菜单项，你必须把它放到一个菜单。这是通过使用append()方法。为了捕捉用户选择的菜单项，我们需要连接到“activate”信号通常的方式。所以，如果我们
+要创建一个标准的File菜单的选项，具有打开，保存，和退出，代码看起来是这样的：
+file_menu = gtk.Menu()	# Don't need to show menus
+
+# Create the menu items
+open_item = gtk.MenuItem("Open")
+save_item = gtk.MenuItem("Save")
+quit_item = gtk.MenuItem("Quit")
+
+# Add them to the menu
+file_menu.append(open_item)
+file_menu.append(save_item)
+file_menu.append(quit_item)
+
+# Attach the callback functions to the activate signal
+open_item.connect_object("activate", menuitem_response, "file.open")
+save_item.connect_object("activate", menuitem_response, "file.save")
+
+# We can attach the Quit menu item to our exit function
+quit_item.connect_object("activate", destroy, "file.quit")
+
+# We do need to show menu items
+open_item.show()
+save_item.show()
+quit_item.show()
+到现在我们就有了自己的菜单。现在我们需要创建一个menubar和一个menu item给File entry， 来添加我们的菜单。代码如下:
+menu_bar = gtk.MenuBar()
+window.add(menu_bar)
+menu_bar.show()
+
+file_item = gtk.MenuItem("File")
+file_item.show()
+现在我们需要把menu与file_item关联起来。这是通过如下方法:
+menu_item.set_submenu(submenu)
+所以，我们的例子接着是:
+file_item.set_submenu(file_menu)
+剩下的只是把menu添加到menubar，如下完成:
+menu_bar.append(child)
+在我们的例子中如下:
+menu_bar.append(file_item)
+如果我们想让菜单上的菜单，如帮助菜单往往是右对齐，我们可以使用下面的方法
+（又是对file_item在当前的例子），然后将其连接到菜单栏。
+menu_item.set_right_justified(right_justified)
+这里总结了需要创建一个菜单栏，菜单，连接的步骤：
+•创建一个新的菜单，使用gtk.Menu（）
+•使用多个gtk.MenuItem（）的调用，你想对你的菜单中每个项目。使用的append（）
+的方法来把这些新项目的菜单。
+•创建一个菜单项使用gtk.MenuItem（）。这将是菜单的根，这里显示的文字会
+在菜单栏上本身。
+•使用set_submenu（）方法来将菜单的根菜单项（在上面的步骤中创建的1）。
+•使用gtk.MenuBar（）创建一个新的菜单栏。此步骤只需要进行一次时创造了一系列的
+一个菜单栏上的菜单。
+•使用append（）方法将根菜单上的菜单栏。
+创建一个弹出菜单几乎是相同的。不同的是，菜单也不能由一个菜单栏，张贴“自动”，
+但显式调用一个按钮按下的事件，例如在弹出（）方法。采取以下步骤：
+创建一个事件处理回调。它需要有格式：
+def handler(widget, event):
+•它会使用事件，找出弹出菜单。
+•在事件处理程序中，如果该事件是一个鼠标键按下，处理事件作为一个按钮事件（它是），并把它作为
+所示的示例代码中，将信息传递给弹出（）方法。
+•该事件处理程序绑定到一个小部件：
+widget.connect_object（“事件”的处理程序，菜单）
+其中widget是要绑定到的部件，处理器的处理功能，菜单是菜单创建
+gtk.Menu（）。这可能是一个菜单，其中还贴了一个菜单栏，如图所示的示例代码中。
+\section{手工创建菜单的例子} %Manual Menu Example
+有关做到这一点。让我们一起来看看在的menu.py [的例子/ menu.py]例如方案，以帮助澄清
+的概念。图11.1中，“菜单示例”说明了程序显示：
+The menu.py [examples/menu.py] program source code is:
+
+\section{使用ItemFactory}
+现在，我们已经向你展示了hard way，这里将介绍如何使用gtk.ItemFactory的调用。
+\section{使用ItemFactory的例子}
+[例子/ itemfactory.py的，itemfactory.py]示例程序使用的gtk.ItemFactory的，。图11.2“项目
+厂范例“说明了程序显示：
+The source code for itemfactory.py [examples/itemfactory.py] is:
+For now, there’s only this example. An explanation and lots ’o’ comments will follow later.
+
