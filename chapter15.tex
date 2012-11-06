@@ -1,7 +1,20 @@
 \chapter{New Widget in PyGTK 2.2}
+Clipboard对象在PyGTK 2.2中加入。GtkClipboard在GTK+ 2.0就可用了，但是不是wrapped在PyGTK 2.0中因为它不是一个完整的GObject。一些新对象在PyGTK 2.2中被加入gtk.gdk模块，但是在本教程中不会描述。详见PyGTK 2 参考手册[http://www.pygtk.org/pygtk2reference/index.html]获取跟多关于gtk.gdk.Display,gtk.gdk.DisplayManager和gtk.gdk.Screen对象的更多信息.
 \section{Clipboards}
-\subsection{Creating A Clipboard}
-\subsection{Using Clipboards with Entry, Spinbutton and TextView}
-\subsection{Setting Data on a Clipboard}
-\subsection{Retrieving the Clipboard Contents}
-\subsection{A Clipboard Example}
+一个Clipboard提供了一个存储区域用于在进程间或同一进程的不同小部件之间共享数据。每个Clipboard被一个字符串编名字编码为gdk.Atom所标识。你可以使用任何你想要区分一个Clipboard的名字，如果它不存在，那么会创建一个新的。如果你想在不同进程间共享Clipboard，每个进程都需要知道Clipboard的名字。
+Clipboard建立于SelectionData和selection interfaces之上。默认的用于TextView,Label和Entry的Clipboard是"CLIPBOARD".其他常见的clipboards是"PRIMARY"和"SECONDARY"对应着primary和secondary selections(Win32 ignores these).这些也可以使用gtk.gdk.Atom对象指定: gtk.gdk.SELECTION_CLIPBOARD, gtk.gdk.SELECTION_PRIMARY 和 gtk.gdk.SELECTION_SECONDARY. 参看gtk.gdk.Atom参考文档[http://www.pygtk.org/pygtk2reference/class-gdkatom.html] 获取更多信息。
+	\subsection{Creating A Clipboard}
+Clipboard使用contructor创建:
+clipboard = gtk.Clipboard(display, selection)
+where display is the gtk.gdk.Display associated with the Clipboard named by selection. The following convenience function creates a Clipboard using the default gtk.gdk.Display:
+clipboard = gtk.clipboard_get(selection)
+最后，还可以使用Widget方法创建Clipboard:
+clipboard = widget.get_clipboard(selection)
+The widget must be realized and be part of a toplevel window hierarchy.
+	\subsection{Using Clipboards with Entry, Spinbutton and TextView}
+	\subsection{Setting Data on a Clipboard}
+	\subsection{检索剪贴板内容} %Retrieving the Clipboard Contents
+剪贴板的内容可以使用如下方法检索:
+clipboard.request_contents(target, callback, user_data=None)
+
+	\subsection{A Clipboard Example}

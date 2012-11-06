@@ -1,4 +1,30 @@
-\chapter{New Widgets in PyGTK 2.4}
+\chapter{PyGTK 2.4 的新 widgets}
+不少的新widgets和支持的对象被加入到PyGTK 2.4,包括以下内容:
+• Action, RadioAction, ToggleAction - objects that represent actions that a user can take. Actions contain
+information to be used to create proxy widgets ( for example, icons, menu items and toolbar items).
+• ActionGroup - an object containing Actions that have some relationship, for example, actions to open, close
+and print a document.
+• Border - an object containing the values for a border.
+• ColorButton - a button used to launch a ColorSelectionDialog.
+• ComboBox - a widget providing a list of items to choose from. It replaces the OptionMenu.
+• ComboBoxEntry - a widget providing a text entry field with a dropdown list of items to choose from. It replaces
+the Combo.
+• EntryCompletion - an object providing completion for an Entry widget.
+• Expander - a container that can show and hide its child in response to its button click.
+• FileChooser - an interface for choosing files.
+• FileChooserWidget - a widget implementing the FileChooser interface. It replaces the
+  FileSelection widget. 
+• FileChooserDialog - a dialog used for "File/Open" and "File/Save" actions. It replaces the
+    FileSelectionDialog. 
+• FileFilter - an object used to filter files based on an internal set of rules.
+• FontButton - a button that launches the FontSelectionDialog.
+• IconInfo - an object containing information about an icon in an IconTheme.
+• IconTheme - an object providing lookup of icons by name and size.
+• ToolItem, ToolButton, RadioToolButton, SeparatorToolItem, ToggleToolButton - widgets
+that can be added to a Toolbar. These replace the previous Toolbar items.
+• TreeModelFilter - an object providing a powerful mechanism for revising the representation of an underlying
+TreeModel. This is described in Section 14.10.2, “TreeModelFilter”.
+• UIManager - 提供了一种从一个XML UI描述文件构建菜单和工具条的方式。它也有方法来管理多个UI描述文件的合并和拆分
 \section{The Action and ActionGroup Objects}
 	\subsection{Actions}
 	\subsection{ActionGroup}

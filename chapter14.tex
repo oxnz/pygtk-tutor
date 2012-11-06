@@ -1,42 +1,61 @@
 \chapter{Tree View Wdiget}
+TreeView小部件显示列表和树显示多列。它取代了以前的set of List, CList,
+Tree和Ctree部件与一个更强大和灵活的对象，使用模型 - 视图 - 
+控制器（MVC）的原则，提供以下功能:
+•两个预先定义的模型：one for lists and one for trees
+•同一个模型的多个视图，当模型发生变化时，自动更新
+•选择性的模型数据的显示
+•use of model data to customize the TreeView display on a row-by-row basis
+•预定义的数据渲染对象，用于显示文字，图片和布尔数据
+•可堆叠模型的基本模型数据的排序和筛选的观点
+•重新排序和可调整大小的列
+•通过点击列标题自动排序
+•支持拖放。
+•支持完全用Python编写的定制机型
+•支持自定义单元格渲染器完全用Python写的
+当然，这种能力来自于价格的一个显着更为复杂的对象和接口
+第一次出现压倒性的。在本章的其余部分中，我们将探讨的TreeView对象和接口，以达到
+了解共同使用。更深奥的问题，你就必须在自己的探索。
+我们将开始一个快速的对象和接口的特色，然后潜入的TreeModel接口，
+的的预定义ListStore和TreeStore类的.
 \section{Overview}
 \section{The TreeModel Interface and Data Stores}
-\subsection{Introduction}
-\subsection{Creating TreeStore and ListStore Objects}
-\subsection{Referring to TreeModel Rows}
-\subsection{Adding Rows}
-\subsection{Removing Rows}
-\subsection{Managing Row Data}
-\subsection{Python Protocol Support}
-\subsection{TreeModel Signals}
-\subsection{Sorting TreeModel Rows}
+	\subsection{Introduction}
+	\subsection{Creating TreeStore and ListStore Objects}
+	\subsection{Referring to TreeModel Rows}
+	\subsection{Adding Rows}
+	\subsection{Removing Rows}
+	\subsection{Managing Row Data}
+	\subsection{Python Protocol Support}
+	\subsection{TreeModel Signals}
+	\subsection{Sorting TreeModel Rows}
 \section{TreeViews}
-\subsection{Creating a TreeView}
-\subsection{Getting and Setting the TreeView Model}
-\subsection{Setting TreeView Properties}
+	\subsection{Creating a TreeView}
+	\subsection{Getting and Setting the TreeView Model}
+	\subsection{Setting TreeView Properties}
 \section{CellRenderers}
-\subsection{Overview}
-\subsection{CellRenderer Types}
-\subsection{CellRenderer Properties}
-\subsection{CellRenderer Attributes}
-\subsection{Cell Data Function}
-\subsection{CellRendererText Markup}
-\subsection{Editable Text Cells}
-\subsection{Activatable Toggle Cells}
-\subsection{Editable and Activatable Cell Example Program}
+	\subsection{Overview}
+	\subsection{CellRenderer Types}
+	\subsection{CellRenderer Properties}
+	\subsection{CellRenderer Attributes}
+	\subsection{Cell Data Function}
+	\subsection{CellRendererText Markup}
+	\subsection{Editable Text Cells}
+	\subsection{Activatable Toggle Cells}
+	\subsection{Editable and Activatable Cell Example Program}
 \section{TreeView Columns}
-\subsection{Creating TreeView Columns}
-\subsection{Managing CellRenderers}
+	\subsection{Creating TreeView Columns}
+	\subsection{Managing CellRenderers}
 \section{Manipulating TreeViews}
-\subsection{Manging Columns}
-\subsection{Expanding and Collapsing Child Rows}
+	\subsection{Manging Columns}
+	\subsection{Expanding and Collapsing Child Rows}
 \section{TreeView Signals}
 \section{TreeSelections}
-\subsection{Getting the TreeSelection}
-\subsection{TreeSelection Modes}
-\subsection{Retrieving the Selection}
-\subsection{Using a TreeSelection Function}
-\subsection{Selecting and Unselecting Rows}
+	\subsection{Getting the TreeSelection}
+	\subsection{TreeSelection Modes}
+	\subsection{Retrieving the Selection}
+	\subsection{Using a TreeSelection Function}
+	\subsection{Selecting and Unselecting Rows}
 \section{TreeView Drag and Drop}
 	\subsection{Drag and Drop Reordering}
 	\subsection{External Drag and Drop}
@@ -45,10 +64,10 @@
 	\subsection{TreeModelSort}
 	\subsection{TreeModelFilter}
 \section{The Generic TreeModel}
-\subsection{GenericTree Model Overview}
-\subsection{The Generic TreeModel Interface}
-\subsection{Adding and Removing Rows}
-\subsection{Memory Management}
-\subsection{Other Interfaces}
-\subsection{Applying The GenericTreeModel}
+	\subsection{GenericTree Model Overview}
+	\subsection{The Generic TreeModel Interface}
+	\subsection{Adding and Removing Rows}
+	\subsection{Memory Management}
+	\subsection{Other Interfaces}
+	\subsection{Applying The GenericTreeModel}
 \section{The Generic CellRenderer}

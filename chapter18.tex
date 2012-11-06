@@ -1,6 +1,64 @@
 \chapter{Setting Widget Attributes}
+这里描述了用于操作widget的方法.这些可以用于设置style，padding，size，etc。
+方法:
+widget.activate()
+引起widget to emit "activate"信号。
+方法:
+widget.set_sensitive(sensitive)
+设置widget的sensitivity(i.e. does it react to events).如果sensitive是TRUE，widget将会接收events；如果是FALSE，widget不会接收events。insensitive部件通常显示灰色。
+方法:
+widget.set_size_request(width, height)
+按照给定的width和height设置widget的size
 \section{Widget Flag methods}
+方法:
+widget.set_flags(flags)
+widget.unset_flags(flags)
+flags = widget.flags()
+设置，取消设置和获取gtk.Object和gtk.Widget的flags。flags可以是任何标准flags:
+IN_DESTRUCTION
+FLOATING
+RESERVED_1
+RESERVED_2
+TOPLEVEL
+NO_WINDOW
+REALIZED
+MAPPED
+VISIBLE
+SENSITIVE
+PARENT_SENSITIVE
+CAN_FOCUS
+HAS_FOCUS
+CAN_DEFAULT
+HAS_DEFAULT
+HAS_GRAB
+RC_STYLE
+COMPOSITE_CHILD
+NO_REPARENT
+APP_PAINTABLE
+RECEIVES_DEFAULT
+DOUBLE_BUFFERED
+方法:
+widget.grab_focus()
+允许一个部件to grab the focus assuming that it has the CAN_FOCUS flag set.
 \section{Widget Display Methods}
+方法:
+widget.show()
+widget.show_all()
+widget.hide()
+widget.hide_all()
+widget.realize()
+widget.unrealize()
+widget.map()
+widget.unmap()
+管理widget的显示。
+show()方法被realize()和map()方法使用来安排widget的显示。
+hide()方法安排来从显示中删除widget并在有必要的时候使用unmap()方法unmap它。
+show_all()和hide_all()方法安排来显示或隐藏部件和它所有的后代。
+realize()方法安排来allocate资源给widget包括它的window。
+unrealize()方法释放widget window和其他资源。Unrealize一个部件同时也会隐藏和unmap它。
+map()方法安排来给widget分配显示空间；这个只对需要窗口管理器操作的widgets。Mapping a widget will also cause it to be realized if necessary.
+The unmap() method removes a widget from the display and will also hide it if necessary.
+
 \section{Widget Accelerators}
 \section{Widget Name Methods}
 \section{Widget Style}
