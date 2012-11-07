@@ -1,4 +1,79 @@
 \chapter{GTK's Files}
-	\section{Functions For rc Files}
-	\section{GTK's rc File Format}
-	\section{Example rc file}
+GTK +有它自己的应用程序默认的处理方式，通过使用rc文件。这些可用于设置的颜色的
+只是有关任何插件，也可以被用于瓷砖的pixmaps到背景上的一些部件。
+\section{Functions For rc Files}
+应用程序启动时，你应该有一个调用：
+rc_parse(filename)
+通过在你的rc文件的文件名。这将导致GTK +来解析这个文件，并使用样式设置
+窗口小部件类型定义。
+如果你想有一组特殊的，可以采取不同的风格，从别人的小工具，或任何其他逻辑分区
+窗口小部件，使用一个调用：	
+widget.set_name(name)
+新创建的部件将被分配你指定的名字。这将允许您更改属性
+小部件，通过RC文件的名称。
+如果我们调用是这样的：
+button = gtk.Button("Special Button")
+button.set_name("special button")
+此按钮的名称为“特殊按钮”，也许可以通过在rc文件中的名称为“special
+button.GtkButton“。[---Verify ME！]
+第23.3节“例RC文件”下面的主窗口，设置属性，并让所有的孩子，主窗口
+window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+window.set_name("main window")
+然后在rc文件中定义风格如下:
+widget "main window.*GtkButton*" style "main_button"
+这就设置"main window"中的所有的Button(see Chapter 6, The Button Widget
+)风格为rc文件中所定义的"main_buttons"。
+
+如你所见， 这是一个相当强大的，灵活的系统。如何最好地利用你的想象力
+这一点。
+\section{GTK's rc File Format}
+GTK +的rc文件的格式说明在第23.3节，“例如RC文件”。这是testgtkrc文件
+从GTK +分布，但我添加了一些注释和things。您可能希望这样的解释
+您的应用程序，允许用户微调自己的应用程序。
+有几个指令改变一个构件的属性。
+• fg - Sets the foreground color of a widget.
+• bg - Sets the background color of a widget.
+• bg_pixmap - Sets the background of a widget to a tiled pixmap.
+• font - Sets the font to be used with the given widget.
+此外，有一个构件可以在几个states，​​并可以设置不同的颜色，图像和字体
+每个状态。这些states是：
+NORMAL
+The normal state of a widget, without the mouse over top of it, and not being pressed, etc.
+PRELIGHT
+When the mouse is over top of the widget, colors defined using this state will be in effect.
+ACTIVE
+When the widget is pressed or clicked it will be active, and the attributes assigned by this
+tag will be in effect.
+INSENSITIVE
+When a widget is set insensitive, and cannot be activated, it will take these attributes.
+SELECTED
+When an object is selected, it takes these attributes.
+当用“fg”和“bg”关键字设置构件的颜色，格式为：
+fg[<STATE>] = { Red, Green, Blue }
+STATE是上述states（PRELIGHT，ACTIVE，等。），红色，绿色和蓝色的值在
+是白色的取值范围为0  -  2.0，{1.0，1.0，1.0}。他们必须是浮点型的，否则他们将注册为0，所以直
+“1”是行不通的，它必须是“1.0”。是可以的，因为它并不重要，如果它不认可一个直“0”。无法识别的
+值都设置为0。
+bg_pixmap是非常类似于上述，除了取代颜色由一个文件名。
+pixmap_path是一个分离“：”的路径列表。这些路径都将被搜索你指定的任何pixmap的。
+“字体”指令很简单：	
+font = "<font name>"
+唯一困难的部分是确定字体的字符串。用xfontsel或类似的工具应该有所帮助。
+“widget_class”设置的一类构件的风格。这些类的widget概述在第5.1节中列出的，
+“Widget的层次”。
+“小部件”指令把一个特别命名的部件到一个给定的样式，覆盖任何给定的样式集
+Widget类。这些部件都注册在应用程序中使用set_name（）方法。这可以让你
+每一个部件的基础上，而不是设置整个构件类的属性指定一个构件的属性。我
+强烈建议您记录所有的这些特殊的小工具，让用户可以定制他们。
+当关键字父部件将作为一个属性，它的父应用程序的属性。
+定义一个风格时，你可以将先前定义的样式属性，这个新的。
+style "main_button" = "button"
+{
+	font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+	bg[PRELIGHT] = { 0.75, 0, 0 }
+}
+这个示例用“button”风格，并创建一个新的的的“main_button”简单地改变字体和prelight，风格
+背景颜色“按钮”的风格。
+当然，这些属性并不适用于所有部件。这是一个简单的常识问题真的。任何
+可以适用，应该的。
+\section{Example rc file}

@@ -1,5 +1,307 @@
 \chapter{Scribble, A Simple Example Drawing Program}
 \section{Scribble Overview}
+在这一节中，我们将创建一个简单的绘图程序。在这个过程中，我们将检测如何处理鼠标事件，如何绘制一个窗口和如何通过使用a backing pixmap使得绘图更好。
 \section{Event Handling}
+我们已经讨论过的GTK +信号是高层次的行动，如一个菜单项被选中。但是，
+有时它是有用的了解较低级别的事件，例如鼠标移动，或一个键被按下。
+也有GTK +信号对应到这些低级别的事件。这些信号的处理程序有一个额外的
+参数这是一个gtk.gdk.Event的对象，其中包含有关事件的信息。例如，运动事件
+处理程序被通过一个gtk.gdk.Event的的对象的含EventMotion信息（部分）属性
+如：
+type
+window
+time
+x
+y
+...
+state
+...
+window是窗口，在其中发生的事件。
+x和y给出的事件的坐标。
+type将被设置到的事件类型，在这种情况MOTION_NOTIFY。类型（在模块gtk.gdk）是：
+NOTHING
+DELETE
+DESTROY
+EXPOSE
+a special code to indicate a null event.
+the window manager has requested that the toplevel window be
+hidden or destroyed, usually when the user clicks on a special
+icon in the title bar.
+the window has been destroyed.
+all or part of the window has become visible and needs to be
+redrawn.
+MOTION_NOTIFY the pointer (usually a mouse) has moved.
+BUTTON_PRESS a mouse button has been pressed.
+_2BUTTON_PRESS a mouse button has been double-clicked (clicked twice within
+              a short period of time). Note that each click also generates a
+	                   BUTTON_PRESS event.
+			   _3BUTTON_PRESS a mouse button has been clicked 3 times in a short period of
+			                 time. Note that each click also generates a BUTTON_PRESS event.
+					 BUTTON_RELEASE
+					 KEY_PRESS
+					 a mouse button has been released.
+					 a key has been pressed.
+					 KEY_RELEASE a key has been released.
+					 ENTER_NOTIFY the pointer has entered the window.
+					 LEAVE_NOTIFY the pointer has left the window.
+					 FOCUS_CHANGE the keyboard focus has entered or left the window.
+					 CONFIGURE
+					 changed.
+					 windows.
+					 MAP
+					 UNMAP
+					 the size, position or stacking order of the window has
+					 ←
+					 Note that GTK+ discards these events for GDK_WINDOW_CHILD
+					 ←
+					 the window has been mapped.
+					 the window has been unmapped.
+PROPERTY_NOTIFY a property on the window has been changed or deleted.
+SELECTION_CLEAR the application has lost ownership of a selection.
+SELECTION_REQUEST another application has requested a selection.
+SELECTION_NOTIFY a selection has been received.
+PROXIMITY_IN an input device has moved into contact with a sensing surface
+            (e.g. a touchscreen or graphics tablet).
+	    PROXIMITY_OUT an input device has moved out of contact with a sensing
+	    surface. ←
+	    DRAG_ENTER the mouse has entered the window while a drag is in progress.
+	    DRAG_LEAVE the mouse has left the window while a drag is in progress.
+	    DRAG_MOTION the mouse has moved in the window while a drag is in progress.
+	    DRAG_STATUS the status of the drag operation initiated by the window has
+	    changed. ←
+	    DROP_START a drop operation onto the window has started.
+	    DROP_FINISHED the drop operation initiated by the window has completed.
+	    CLIENT_EVENT a message has been received from another application.
+	    VISIBILITY_NOTIFY
+	    NO_EXPOSE
+	    when parts
+	    the window visibility status has changed.
+	    indicates that the source region was completely available
+	    ←
+	    of a drawable were copied. This is not very useful.
+	    SCROLL
+	    ?
+	    WINDOW_STATE
+	    SETTING
+	    ?
+	    ?
+	    事件发生时的状态指定在修改状态（即，它指定哪一个修改键和鼠标
+	    按钮被按下）。它是按位或以下的一些（模块gtk.gdk）：
+	    SHIFT_MASK
+	    LOCK_MASK
+	    CONTROL_MASK
+	    MOD1_MASK
+	    MOD2_MASK
+	    MOD3_MASK
+	    MOD4_MASK
+	    MOD5_MASK
+	    BUTTON1_MASK
+	    BUTTON2_MASK
+	    BUTTON3_MASK
+	    BUTTON4_MASK
+	    BUTTON5_MASK
+	    至于其他信号，以确定当事件发生时，我们调用connect（）方法时，会发生什么情况。但是，我们也
+	    需要让GTK +的事件，我们希望得到通知的。要做到这一点，我们所说的方法：	
+widget.set_events(events)
+事件参数指定我们感兴趣的事件，它是按位或指定不同的常量
+类型的事件。对于未来的参考，的事件类型（模块gtk.gdk）的有：
+EXPOSURE_MASK
+POINTER_MOTION_MASK
+POINTER_MOTION_HINT_MASK
+BUTTON_MOTION_MASK
+BUTTON1_MOTION_MASK
+BUTTON2_MOTION_MASK
+BUTTON3_MOTION_MASK
+BUTTON_PRESS_MASK
+BUTTON_RELEASE_MASK
+KEY_PRESS_MASK
+KEY_RELEASE_MASK
+ENTER_NOTIFY_MASK
+LEAVE_NOTIFY_MASK
+FOCUS_CHANGE_MASK
+STRUCTURE_MASK
+PROPERTY_CHANGE_MASK
+VISIBILITY_NOTIFY_MASK
+PROXIMITY_IN_MASK
+PROXIMITY_OUT_MASK
+SUBSTRUCTURE_MASK
+有一些细微的问题时要注意调用方法set_events（）来。首先，它必须被称为
+之前的X窗口的PyGTK的部件的创建。在实际应用中，这意味着你应该马上把它
+在创建小部件。其次，小部件必须是1，这将实现与相关联的X窗口中。为
+效率，许多类型的组件没有自己的窗口，但吸引他们的父窗口。这些部件包括：
+gtk.Alignment
+gtk.Arrow
+gtk.Bin
+gtk.Box
+gtk.Image
+gtk.Item
+gtk.Label
+gtk.Layout
+gtk.Pixmap
+gtk.ScrolledWindow
+gtk.Separator
+gtk.Table
+gtk.AspectFrame
+gtk.Frame
+gtk.VBox
+gtk.HBox
+gtk.VSeparator
+gtk.HSeparator
+为了捕捉这些小部件的事件，你需要使用一个事件盒构件。请参见第10.1节“事件盒的”widget
+了解详细信息。
+所设定的PyGTK的每种类型的事件的事件属性是：
+every event
+type
+window
+send_event
+NOTHING
+DELETE
+DESTROY
+# no additional attributes
+EXPOSE area
+      count
+      MOTION_NOTIFY time
+                   x
+		               y
+			                  pressure
+					            xtilt
+						             ytilt
+							             state
+								            is_hint
+									          source
+										       deviceid
+										           x_root
+											      y_root
+											      BUTTON_PRESS
+											      _2BUTTON_PRESS
+											      _3BUTTON_PRESS
+											      BUTTON_RELEASE
+											      time
+											      x
+											      y
+											      pressure
+											      xtilt
+											      ytilt
+											      state
+
+										button
+										source
+										deviceid
+										x_root
+										y_root
+										KEY_PRESS
+										KEY_RELEASE
+										ENTER_NOTIFY
+										LEAVE_NOTIFY
+										FOCUS_CHANGE
+										CONFIGURE
+										time
+										state
+										keyval
+										string
+										subwindow
+										time
+										x
+										y
+										x_root
+										y_root
+										mode
+										detail
+										focus
+										state
+										_in
+										x
+										y
+										width
+										height
+										MAP
+										UNMAP
+										PROPERTY_NOTIFY
+										# no additional attributes
+										atom
+										time
+										state
+										SELECTION_CLEAR
+										SELECTION_REQUEST
+										SELECTION_NOTIFY
+										selection
+										target
+										property
+										requestor
+										time
+										PROXIMITY_IN
+										PROXIMITY_OUT
+										time
+										source
+										deviceid
+										DRAG_ENTER
+										DRAG_LEAVE
+										DRAG_MOTION
+DRAG_STATUS
+DROP_START
+DROP_FINISHED
+CLIENT_EVENT
+VISIBILTY_NOTIFY
+context
+time
+x_root
+y_root
+message_type
+data_format
+data
+state
+NO_EXPOSE
+# no additional attributes
+
 	\subsection{Scribble-Event Handling}
+我们的绘图程序，当按下鼠标按钮，当鼠标移动时，我们想知道的，所以我们
+指定POINTER_MOTION_MASK和BUTTON_PRESS_MASK。我们也想知道，当我们需要重绘
+我们的窗口，所以我们指定EXPOSURE_MASK。尽管我们想通过配置事件通知时，我们
+窗口大小的变化，我们不指定相应STRUCTURE_MASK标志，因为它是自动
+指定的所有窗口。
+事实证明，但是，有一个问题是，与只指定POINTER_MOTION_MASK。这将导致
+服务器添加一个新的运动事件到事件队列每次用户移动鼠标。试想一下，它需要我们0.1
+秒处理一个运动事件，但是X服务器队列中一种新的运动事件，每0.05秒。我们将很快得到
+用户绘图的方式落后。如果用户利用5秒钟，它会带我们再过5秒后，他们
+释放鼠标按钮！我们想的是只得到一个运动事件，每个事件我们处理。的方式来
+这是到指定POINTER_MOTION_HINT_MASK。
+当我们指定POINTER_MOTION_HINT_MASK，服务器发送一个运动事件第一时间的指针
+移动后，进入我们的窗口，或在一个按钮按下或释放事件。随后的运动事件将被抑制
+除非我们明确要求位置的指针使用gtk.gdk.Window方法：
+x,y,mask = window.get_pointer()
+窗口是一个gtk.gdk.Window对象。 x和y的坐标的指针和掩模是修饰符掩码
+检测哪个键被按下。 （有一个gtk.Widget的方法，get_pointer的（），这提供了相同的
+信息作为gtk.gdk.Window get_pointer的（）的方法，但它不返回的掩模信息）
+该scribblesimple.py [的例子/ sc​​ribblesimple.py]示例程序演示了基本的使用事件和事件
+处理程序。图24.2，“简单的涂鸦示例”说明了在行动方案：
+The event handlers are connected to the drawing_area by the following lines:
+# Signals used to handle backing pixmap
+drawing_area.connect("expose_event", expose_event)
+drawing_area.connect("configure_event", configure_event)
+# Event signals
+drawing_area.connect("motion_notify_event", motion_notify_event)
+drawing_area.connect("button_press_event", button_press_event)
+drawing_area.set_events(gtk.gdk.EXPOSURE_MASK
+| gtk.gdk.LEAVE_NOTIFY_MASK
+| gtk.gdk.BUTTON_PRESS_MASK
+| gtk.gdk.POINTER_MOTION_MASK
+| gtk.gdk.POINTER_MOTION_HINT_MASK)
+的button_press_event（）和motion_notify_event（）事件处理程序中scribblesimple.py [考试
+	普莱斯/ scribblesimple.py是：
+def button_press_event(widget, event):
+if event.button == 1 and pixmap != None:
+draw_brush(widget, event.x, event.y)
+return True
+def motion_notify_event(widget, event):
+if event.is_hint:
+x, y, state = event.window.get_pointer()
+else:
+x = event.x
+y = event.y
+state = event.state
+if state & gtk.gdk.BUTTON1_MASK and pixmap != None:
+draw_brush(widget, x, y)
+return True
+The expose_event() and configure_event() handlers will be described later.
+
 \section{The DrawingArea Widget, And Drawing}

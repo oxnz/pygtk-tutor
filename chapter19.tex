@@ -1,4 +1,51 @@
 \chapter{Timeouts, IO and Idle Functions}
 \section{Timeouts}
+你可能会想知道你是怎么做使GTK在main()做有益的工作.那么，你有几种选择。使用下面的
+gobject模块函数后您可以创建一个超时函数，会在每个milliseconds时被调用。
+source_id = gobject.timeout_add(interval, function, ...)
+interval参数是调用你的函数的时间间隔数milliseconds。function参数是你希望的回调函数。这两个参数之后的任何参数都将作为数据传递给functoin。返回值是一个整数source_id可以用来终止超时:
+gobject.source_remove(source_id)
+您也可以再次被调用，停止超时回调函数返回零或FALSE您的
+回调。如果你想你的回调再次被调用，它应该返回TRUE。
+你的回调函数应该如下所示:
+def timeout_callback(...):
+对掉函数的参数数量应该与timeout_add()中指定的参数数量匹配。
 \section{Monitoring IO}
+您可以检查能够读取或写入到一个文件中（一个Python文件或一个较低的水平OS文件），然后
+自动调用一个回调。这是特别有用的网络应用程序。 GObject的模块函数:
+source_id = gobject.io_add_watch(source, condition, callback)
+其中第一个参数(source)你想监控的打开的文件(Python文件对象或更低级别的文件描述符整数)
+gobject.io_add_watch（）函数内部使用较低级别的文件描述符整数
+该函数将提取使用fileno()方法需要从Python文件对象。第二个参数
+（条件）指定你想寻找什么。这可能是以下之一:
+gobject.IO_IN - There is data ready for reading from your file.
+gobject.IO_OUT - The file is ready for writing.
+gobject.IO_PRI - There is urgent data to read.
+gobject.IO_ERR - Error condition.
+gobject.IO_HUP - Hung up (the connection has been broken, usually for
+pipes and sockets).
+这些在gobject模块中被定义。我敢肯定，你已经猜到了，第三个参数是满足上述条件时调用的回调函数.
+
+返回值source_id可用于停止监视的文件通过使用下面的函数:
+gobject.source_remove(source_id)
+回调函数应该像下面这样:
+def input_callback(source, condition):
+source和condition的如上述指定。source的值将是较低层的文件描述符
+整数，而不是Python文件对象（即从Python文件的方法的fileno（）返回的值）。
+
+您也可以停止回调函数再次被调用，返回零或FALSE从您的回调。如果
+你希望你的回调再次被调用，它应该返回TRUE。
 \section{Idle Functions}
+如果你有一个函数，你想在没有其他被称为正在发生的事情吗？使用这个函数：
+source_id = gobject.idle_add(callback, ...)
+第一(indicated with...)以外的任何参数传递给回调，以。返回的source_id的
+提供一个参考的处理程序。
+此功能使GTK调用指定的回调函数，只要没有别的正​​在发生的事情。
+回调签名是：
+def callback(...):
+传递给回调函数的参数是相同的那些中指定的gobject.idle_add（）
+功能。与其他的回调函数，返回FALSE将停止空闲回调被称为
+返回TRUE会导致回调函数运行的下一个空闲的时间。	
+空闲功能，可以通过调用函数从队列中删除：
+gobject.source_remove（source_id）
+与从gobject.idle_add（）函数返回的source_id。
